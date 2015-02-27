@@ -1,6 +1,7 @@
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema;
-      
+
+
 var userSchema = new Schema({
 	email: {type: String, required: true, trim: true, index: {unique: true}},
 	// pwHash: {type: String, required: true},
@@ -8,8 +9,11 @@ var userSchema = new Schema({
 	firstName: {type: String, required: true, trim: true},
 	lastName: {type: String, required: true, trim: true},
 	phone: {type: Number, required: true},
+	friends: [],
 	dateCreated: {type: Date, default: Date.now}
 });
+
+
       
 var user = mongoose.model('user', userSchema);
       

@@ -38,3 +38,7 @@ $ npm start
 	-	import friends from fb 1-time option
 -	view specific user
 	-	have more information than just picture, name, recent checkin?
+	
+
+### to implement for 3/2:
+

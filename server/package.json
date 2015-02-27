@@ -4,7 +4,8 @@
   "description": "temporary location sharing app",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha test"
   },
   "repository": {
     "type": "git",
