@@ -40,5 +40,7 @@ $ npm start
 	-	have more information than just picture, name, recent checkin?
 	
 
-### to implement for 3/2:
+### to implement for week of 3/2:
+-	current server but in PostgreSQL or another relational database
+-	iOS app that can parse JSON from each of the specified routes
 
