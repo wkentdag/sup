@@ -1,0 +1,15 @@
+{
+  "name": "pg-server",
+  "version": "0.0.0",
+  "description": "![Alt text](/path/to/img.jpg)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.12.0",
+    "pg": "^4.3.0"
+  }
+}
