@@ -8,6 +8,7 @@
 ```
 $ cd sup/server
 $ npm install
+$ mkdir data
 $ mongod --dbpath data/
 $ npm start
 ```
