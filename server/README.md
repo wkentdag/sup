@@ -37,4 +37,10 @@ SQL style:
   * `initTable` : run once to setup table schema
   * `getAllUsers`
   * `newUser` : currently adds fake data from faker js.
+  
+##Notes on DB schema:
+
+* user to post relationship represented by a third table that maps a user to the post they create. 
+	* questions for next time: should this third table operate like a stack, or should we find each relationship and update?
+* how to represent post visiblity to friends? in a separate table prob
 
