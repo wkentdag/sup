@@ -14,6 +14,11 @@ Postgres Guide: [](http://postgresguide.com/index.html)
   * `newUser` : currently adds fake data from faker js.
 
 ###Notes on using postgres:
+
+To start the server:
+* `postgres -D /usr/local/var/postgres`
+* Ctrl + C to stop
+
 To make and delete database
 * `dropdb name_of_db`
 * `createdb name_of_db`
