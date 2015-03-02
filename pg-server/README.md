@@ -1,14 +1,17 @@
 
-![Alt text](http://www.rivr.com/lib/image/thumbs/Hey_Dude_338_999.jpg)
+![Sup](http://www.rivr.com/lib/image/thumbs/Hey_Dude_338_999.jpg)
 
 #Testing Postgres database
 ##with basic server app
 
 [THIS](https://www.codefellows.org/blog/three-battle-tested-ways-to-install-postgresql) Seems like a good detailed installation tutorial
 
+Postgres Guide: [](http://postgresguide.com/index.html)
+
 ###API
+  * `initTable` : run once to setup table schema
   * `getAllUsers`
-  * `newUser` : currently adds fake data form faker js.
+  * `newUser` : currently adds fake data from faker js.
 
 ###Notes on using postgres:
 To make and delete database
