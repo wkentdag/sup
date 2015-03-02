@@ -1,32 +1,25 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('static-favicon');
+var debug = require('debug')('better');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var express = require('express')
+var PORT = process.env.PORT || 3000;
+var app = express()
 
-var mongoose = require('mongoose');
+var users = require('./users');
+// var posts = require('./posts'); //TODO: Implement posts collection
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
-var app = express();
-
-mongoose.connect('mongodb://localhost/sup-test_1');
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(favicon());
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+//--------- API Routes ---------
+
 app.use('/users', users);
+// app.use('/posts', posts); //TODO
+
+app.get('/', function(req, res){
+  res.send('Hi from sup')
+})
+
+
+//--------- Error Handling for express ---------
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -35,7 +28,7 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-/// error handlers
+/// error handlers:
 
 // development error handler
 // will print stacktrace
@@ -60,4 +53,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-module.exports = app;
+// Start webserver on PORT
+app.listen(PORT)
+console.log('App running on port', PORT)
