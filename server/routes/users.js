@@ -1,7 +1,7 @@
 var express = require('express');
 var faker = require('faker')
 var router = express.Router();
-var Users = require('./models/usersModel')
+var Users = require('../models/usersModel')
 
 
 /* GET users listing. */

@@ -2,9 +2,9 @@ var debug = require('debug')('better');
 var logger = require('morgan');
 var express = require('express')
 var PORT = process.env.PORT || 3000;
-var app = express()
+var app = express();
 
-var users = require('./users');
+var users = require('./routes/users');
 // var posts = require('./posts'); //TODO: Implement posts collection
 
 app.use(logger('dev'));

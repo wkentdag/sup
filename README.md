@@ -1,19 +1,6 @@
 # sup
 
 
-## to run server:
-
--  install node and the mongod daemon
-
-```
-$ cd sup/server
-$ npm install
-$ mkdir data
-$ mongod --dbpath data/
-$ npm start
-```
--  point your browser to the app running at `localhost:3000`
-
 ##General App Contents / Features:
 
 -	Info associated with 1 SUP:

@@ -4,7 +4,10 @@ Don't forget to change the conString to match your instance of postgres
 */
 
 var pg = require('pg')
-var conString = "postgres://scotthurlow:1234@localhost/supUsers";
+// var conString = "postgres://scotthurlow:1234@localhost/supUsers";
+var user = process.env.USER
+var pw = process.env.PW
+var conString = "postgres://" + user + ":" + pw + "@localhost/supUsers";
 var Users = {};
 var client;
 

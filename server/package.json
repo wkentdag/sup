@@ -1,5 +1,5 @@
 {
-  "name": "sup api server",
+  "name": "sup",
   "version": "0.0.1",
   "description": "temporary location sharing",
   "main": "app.js",
