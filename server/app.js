@@ -5,14 +5,14 @@ var PORT = process.env.PORT || 3000;
 var app = express();
 
 var users = require('./routes/users');
-// var posts = require('./posts'); //TODO: Implement posts collection
+var status = require('./routes/status');
 
 app.use(logger('dev'));
 
 //--------- API Routes ---------
 
 app.use('/users', users);
-// app.use('/posts', posts); //TODO
+app.use('/status', status);
 
 app.get('/', function(req, res){
   res.send('Hi from sup')
@@ -34,8 +34,8 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
+        res.status(err.status || 500)
+        .json('error', {
             message: err.message,
             error: err
         });
@@ -46,10 +46,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+    res.json(404, {error: err.message});
 });
 
 

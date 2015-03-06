@@ -1,30 +1,60 @@
 
 ![Sup](http://www.rivr.com/lib/image/thumbs/Hey_Dude_338_999.jpg)
 
-##to run the server:
+---
+##API
+each route can be viewed from localhost:3000
 
-* start postgres: `postgres -D /usr/local/var/postgres` and leave running in one terminal window
-* make the database if it doesn't exist(in a separate terminal window): `createdb 'supUsers'
-* run the node server, specifying your database username and password as environment runtime variables:
-	* `USER='yourusername' PW='yourpw' node app.js` (make sure you're inside the `server` subdirectory)
+**Users:**
+  
+  * `/users` : gets all users
+  * `/users/new` : adds new user (currently adds fake data from faker js.)
+  * `/users/id` : insert actual user id to see data for single user
 
-##learning postgres:
+**Statuses:**
+	
+  * `/status` : get all statuses
+  * `/status/new` : get all statuses
+  * In development... `/status/id` : insert user id to see statuses visible to that user
 
-[THIS](https://www.codefellows.org/blog/three-battle-tested-ways-to-install-postgresql) Seems like a good detailed installation tutorial
+---
 
+##Installing Postgres
+[THIS](https://www.codefellows.org/blog/three-battle-tested-ways-to-install-postgresql) Is a good installation tutorial
+
+!! Skip the step that creates the Launch Agent, and instead use these commands:
+
+**Start:** `postgres -D /usr/local/var/postgres`
+
+**Stop:** `Ctrl + C`
+
+##Running the server:
+
+* Start postgres: `postgres -D /usr/local/var/postgres` and leave running in one terminal window
+* Make the database if it doesn't exist (in a separate terminal window): `createdb SUP`
+* Set up data tables in db: `node setTables.js` (only needs to be run once when you create new database)
+* Run the node server: `node app.js`
+
+##Working with postgres:
+
+
+To check if database is running : `ps aux | grep postgres`
+
+To make and delete database (also works to clear database and start new)
+
+* `dropdb SUP`
+* `createdb SUP`
+
+<!-- Or -->
+
+<!-- **Start:** `postgres -D /usr/local/var/postgres &` -->
+
+<!-- **Stop:** `` kill -INT `)head -1 /usr/local/var/postgres/postmaster.pid` `` -->
+
+Check out
 [Postgres Guide](http://postgresguide.com/index.html)
 
 ###Notes:
-
-To start the server:
-
-* `postgres -D /usr/local/var/postgres`
-* Ctrl + C to stop
-
-To make and delete database
-
-* `dropdb name_of_db`
-* `createdb name_of_db`
 
 SQL style:
 
@@ -33,10 +63,7 @@ SQL style:
 * __Select from table__ "SELECT *keyA*, *keyB* FROM *name_of_table*"
 
 
-##API
-  * `initTable` : run once to setup table schema
-  * `getAllUsers`
-  * `newUser` : currently adds fake data from faker js.
+
   
 ##Notes on DB schema:
 
