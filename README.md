@@ -28,7 +28,13 @@
 	-	have more information than just picture, name, recent checkin?
 	
 
-### to implement for week of 3/2:
--	current server but in PostgreSQL or another relational database
--	iOS app that can parse JSON from each of the specified routes
+### to-do for midterm presentation:
+
+* make visual represetnation of the schema (Will)
+* clean up API code/documentation (change fake GET requests to POSTs, etc) (Will and Scott) - before spring break
+* wireframes (Tom) - by 3/25
+* display server response to GET and POST requests within iOS app (Sam) - by 3/25
+* make a slideshow to wrap all of our progress together (everybody - 3/26)
+	* potential structure: wireframes, database schema, demo
+
 
