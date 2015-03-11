@@ -33,7 +33,8 @@ each route can be viewed from localhost:3000
 * Start postgres: `postgres -D /usr/local/var/postgres` and leave running in one terminal window
 * Make the database if it doesn't exist (in a separate terminal window): `createdb SUP`
 * Set up data tables in db: `node setTables.js` (only needs to be run once when you create new database)
-* Run the node server: `node app.js`
+* Run the node server: <!-- `node app.js` --> 
+	* `USER='yourusername' PW='yourpw' node app.js` (make sure you're inside the `server` subdirectory)
 
 ##Working with postgres:
 
