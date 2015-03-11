@@ -14,7 +14,7 @@ each route can be viewed from localhost:3000
 **Statuses:**
 	
   * `GET /status` : get all statuses
-  * `POST /status/new` : post a new status
+  * `POST /status` : post a new status
   * In development... `/status/id` : insert user id to see statuses visible to that user
 
 ---
