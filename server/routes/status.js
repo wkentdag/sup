@@ -1,52 +1,57 @@
 var express = require('express');
-var faker = require('faker')
-var statuses = express.Router();
-var Users = require('../models/usersModel')
+var status = express.Router();
+var Status = require('../models/Status');
 
-/* GET statuses listing. */
+//  for development/testing only:
+var makeRandomStatus = require('../test/utils').makeRandomStatus;
+
 
 //Get all statuses in table
-statuses.get('/', function(req, res) {
-  Users.getAllStatus(function(err, result) {
-    if (err) res.json(500, {error: err})
-    res.json(200, result)
-  })
+status.get('/', function(req, res) {
+  Status.getAllStatus(function(err, result) {
+    if (err) {
+      res.json(500, {error: err});
+    } else {
+      res.json(200, result);     
+    }
+  });
 });
 
-//This should be POST
 //Add new status with specified permission
-statuses.get('/new', function(req, res) {
-  var usrObj = makeRandomStatus()
-  Users.addStatus(usrObj, function(err, result) {
-    if (err) res.json(500, {error: err})
-    res.json(200, {message: "done."})
-  })
+status.post('/', function(req, res) {
+
+  // TODO: when POSTing is set up on the client, use the line below instead of makeRandomStatus()
+  // var usrObj = req.body.status;
+  var statusObj = makeRandomStatus();
+
+  Status.addStatus(statusObj, function(err, result) {
+    if (err) {
+      res.json(500, {error: err});
+    } else {
+      res.json(200, {message: "done."});    
+    }
+  });
 });
 
 //Get statuses visible to one user
-statuses.get('/:id', function(req, res) {
-  var user_id = req.params.id
-  Users.getVisibleStatus(user_id, function(err, result) {
-    console.log("Error", err)
-    console.log("Result", result)
+status.get('/:id', function(req, res) {
+
+  //  FIX ME: DB returns an error whether this variable \
+  //          is a user ID or a status ID ...???
+  var user_id = req.params.id;
+  Status.getVisibleStatus(user_id, function(err, result) {
+    console.log("Error:\t", err);
+    console.log("Result:\t", result);
+
     if (!err && result.rowCount > 0) {
-      res.json(200, result.rows)
+      res.json(200, result.rows);
     } else if (!err) {
-      res.json(404, {error: "Error. No visible statuses for '" + user_id})
+      res.json(404, {error: "Error. No visible statuses for '" + user_id});
     } else {
-      res.json(500, {error: err})
+      res.json(500, {error: err});
     }
   })
 })
 
 
-function makeRandomStatus() {
-  var fakeStatus = {}
-  fakeStatus.id = faker.finance.mask()
-  fakeStatus.owner = faker.finance.mask()
-  fakeStatus.loc = faker.address.longitude() + " " + faker.address.latitude()
-  fakeStatus.time = faker.random.number(60)
-  return fakeStatus
-}
-
-module.exports = statuses;
+module.exports = status;
