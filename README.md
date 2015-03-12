@@ -27,11 +27,14 @@
 -	view specific user
 	-	have more information than just picture, name, recent checkin?
 	
+### database schema:
+![database schema diagram](docs/sup-db-schema-diagram.png)
+	
 
 ### to-do for midterm presentation:
 
-* make visual represetnation of the schema (Will)
-* clean up API code/documentation (change fake GET requests to POSTs, etc) (Will and Scott) - before spring break
+* ~~make visual represetnation of the schema (Will)~~
+* ~~clean up API code/documentation (change fake GET requests to POSTs, etc) (Will and Scott)~~ - before spring break
 * wireframes (Tom) - by 3/25
 * display server response to GET and POST requests within iOS app (Sam) - by 3/25
 * make a slideshow to wrap all of our progress together (everybody - 3/26)
