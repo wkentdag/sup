@@ -21,8 +21,8 @@ users.get('/', function(req, res) {
 users.post('/', function(req, res) {
 
   // TODO: when POSTing is set up on the client, uncomment the line below instead of makeRandomUser()
-  // var usrObj = req.body.user;
-  var usrObj = makeRandomUser()
+  var usrObj = req.body;
+  // var usrObj = makeRandomUser()
 
   Users.addUser(usrObj, function(err, result) {
     if (err) {
