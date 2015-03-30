@@ -43,8 +43,8 @@ users.post('/', function(req, res) {
     }
 
     // TODO: when POSTing is set up on the client, uncomment the line below instead of makeRandomUser()
-    var usrObj = req.body;
-    // var usrObj = makeRandomUser()
+    // var usrObj = req.body;
+    var usrObj = makeRandomUser();
 
     Users.addUser(client, usrObj, function(err, result) {
       done();
@@ -54,7 +54,7 @@ users.post('/', function(req, res) {
       }
 
       // console.log('success!\t', result);
-      res.json(200, result);
+      res.json(200, "done.");
 
       client.end();
     });   //  end Users.addUser

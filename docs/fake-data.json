@@ -1,0 +1,68 @@
+//	User Table
+{
+	"id": 10,
+	"firstName": "Will",
+	"lastName": "Kent-Daggett",
+	"email":"willkentdaggett@gmail.com",
+	"userSince" :"/timestamp"
+},
+
+{
+	"id": 11,
+	"firstName": "Scott",
+	"lastName": "Hurlow",
+	"email":"scott@hurlow.com",
+	"userSince" :"/timestamp"
+},
+
+{
+	"id": 12,
+	"firstName": "Tom",
+	"lastName": "Wakin",
+	"email":"tom@wakin.com",
+	"userSince" :"/timestamp"
+},
+
+{
+	"id": 13,
+	"firstName": "Sam",
+	"lastName": "Finegold",
+	"email":"sam@finegold.com",
+	"userSince" :"/timestamp"
+},
+
+
+
+//	Status Table
+{
+	"id": 20, 	
+	"author_id": 10,
+	"location" :"-125.1749 -22.3464",
+	"time" : "/timestamp",
+	"duration" : 4,
+	"status" : "Doing homework! :("
+},
+
+{
+	"id": 21, 	
+	"author_id": 10,
+	"location" :"-125.1749 -22.3464",
+	"time" : "/timestamp",
+	"duration" : 2,
+	"status" : "Reading"
+},
+
+{
+	"id": 22, 	
+	"author_id": 11,
+	"location" :"-125.1749 -22.3464",
+	"time" : "/timestamp",
+	"duration" : 1,
+	"status" : "Procrastinating"
+}
+
+//	Friends Table
+{
+	
+}
+
