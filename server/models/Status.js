@@ -1,20 +1,5 @@
-/**
-  *
-  * Database Connection:
-  *
-**/
 
-var pg = require('pg');
-var user = process.env.USER;
-var pw = process.env.PW;
-var conString = "postgres://" + user + ":" + pw + "@localhost/SUP";
 var Status = {};
-var client;
-
-pg.connect(conString, function(err, cl, d){
-  if (err) return console.error('Error connecting to postgres', err)
-  client = cl;
-});
 
 /**
   *
@@ -22,7 +7,7 @@ pg.connect(conString, function(err, cl, d){
   *
 **/
 
-Status.addStatus = function(statusObj, cb) {
+Status.addStatus = function(client, statusObj, cb) {
   var statusArr = [ statusObj.id, statusObj.owner, statusObj.loc, statusObj.time ]
   var qStr = "INSERT INTO status(status_id, owner_id, location, time) VALUES($1, $2, $3, $4)"
   client.query(qStr, statusArr, function(err, result){
@@ -31,7 +16,7 @@ Status.addStatus = function(statusObj, cb) {
   })
 }
 
-Status.getAllStatus = function(cb) {
+Status.getAllStatus = function(client, cb) {
   var query = client.query("SELECT * FROM status")
   
   query.on('error', function(err) {
@@ -45,7 +30,7 @@ Status.getAllStatus = function(cb) {
   })
 }
 
-Status.getVisibleStatus = function(owner_id, cb){
+Status.getVisibleStatus = function(client, owner_id, cb){
   var qStr = "SELECT * \
               FROM status, statusView \
               WHERE statusView.owner_id = $1"
