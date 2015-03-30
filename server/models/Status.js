@@ -8,10 +8,10 @@ var Status = {};
 **/
 
 Status.addStatus = function(client, statusObj, cb) {
-  var statusArr = [ statusObj.id, statusObj.owner, statusObj.loc, statusObj.time ]
-  var qStr = "INSERT INTO status(status_id, owner_id, location, time) VALUES($1, $2, $3, $4)"
+  var statusArr = [ statusObj.id, statusObj.owner, statusObj.latitude,, statusObj.longitude statusObj.time ]
+  var qStr = "INSERT INTO status(status_id, owner_id, latitude, longitude, time) VALUES($1, $2, $3, $4, $5)"
   client.query(qStr, statusArr, function(err, result){
-    if (err) cb(err)
+    if (err) return cb(err)
     cb(null, result)
   })
 }

@@ -16,7 +16,8 @@ pg.connect(conString, function(err, client, done){
   var status = "CREATE TABLE IF NOT EXISTS status ( \
                 status_id int, \
                 owner_id int,\
-                location varchar(50),\
+                longitude float,\
+                latitude float,\
                 time int)";
   var statusView = "CREATE TABLE IF NOT EXISTS statusView(\
                 user_id int,\
@@ -24,18 +25,18 @@ pg.connect(conString, function(err, client, done){
   
   client.query(user, function(err, result){
     if (err) throw err
-    done()
-  })
+    done();
+  });
 
   client.query(status, function(err, result){
     if (err) throw err
-    done()
-  })
+    done();
+  });
 
   client.query(statusView, function(err, result){
     if (err) throw err
-    done()
-  })
+    done();
+  });
 
-  pg.end()
-})
+  pg.end();
+});
