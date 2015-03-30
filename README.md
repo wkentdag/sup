@@ -37,6 +37,11 @@
 * ~~clean up API code/documentation (change fake GET requests to POSTs, etc) (Will and Scott)~~ - before spring break
 * wireframes (Tom) - by 3/25
 * display server response to GET and POST requests within iOS app (Sam) - by 3/25
+	* get client to post new users
+	* get client to post new status
+	* show user added to table
+* display SUP status locations on client (integrating with gmaps) (Scott)
+* Merge client repo into existing sup project (Sam)
 * make a slideshow to wrap all of our progress together (everybody - 3/26)
 	* potential structure: wireframes, database schema, demo
 

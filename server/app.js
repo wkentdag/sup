@@ -1,12 +1,14 @@
 var debug = require('debug')('better');
 var logger = require('morgan');
 var express = require('express')
+var bodyParser = require('body-parser')
 var PORT = process.env.PORT || 3000;
 var app = express();
 
 var users = require('./routes/users');
 var status = require('./routes/status');
 
+app.use(bodyParser.json());
 app.use(logger('dev'));
 
 //--------- API Routes ---------

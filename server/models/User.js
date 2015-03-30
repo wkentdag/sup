@@ -10,7 +10,7 @@ Users.addUser = function(client, usrObj, cb) {
   var usrArr = [ usrObj.id, usrObj.name, usrObj.email ]
   var qStr = "INSERT INTO users(user_id, name, email) VALUES($1, $2, $3)"
   client.query(qStr, usrArr, function(err, result){
-    if (err) cb(err)
+    if (err) return cb(err)
     cb(null, result)
   })
 }

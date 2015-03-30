@@ -37,13 +37,14 @@ users.get('/', function(req, res) {
 //add new user
 users.post('/', function(req, res) {
   pg.connect(conString, function(err, client, done) {
+
     if (err) {
       res.json(500, err);
     }
 
     // TODO: when POSTing is set up on the client, uncomment the line below instead of makeRandomUser()
-    // var usrObj = req.body.user;
-    var usrObj = makeRandomUser()
+    var usrObj = req.body;
+    // var usrObj = makeRandomUser()
 
     Users.addUser(client, usrObj, function(err, result) {
       done();
