@@ -48,6 +48,8 @@ status.post('/', function(req, res) {
     var statusObj = makeRandomStatus();
 
     Status.addStatus(client, statusObj, function(err, result) {
+      done();
+
       if (err) {
         res.json(500, {error: err});
       } else {
@@ -70,6 +72,8 @@ status.get('/:id', function(req, res) {
     //          is a user ID or a status ID ...???
     var owner_id = req.params.id;
     Status.getVisibleStatus(client, owner_id, function(err, reuslt) {
+      done();
+
       if (!err && result.rowCount > 0) {
         res.json(200, result.rows);
       } else if (!err) {
