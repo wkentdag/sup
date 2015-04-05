@@ -70,31 +70,21 @@ users.get('/:id', function(req, res) {
 
     var user_id = req.params.id;
     Users.getUserById(client, user_id, function(err, result) {
+      done();
+
       if (!err && result.rowCount > 0) {
-        // console.log('hello from no error and result! (200)');
         res.json(200, result.rows[0]);
+
       } else if (!err) {
-        // console.log('hello from no error and no result! (404)');
         res.json(404, {error: "Error. User '" + user_id + "' does not exist."});
+
       } else {
-        // console.log('hello from error and no result! (500)');
         res.json(500, {error: err});
       }
+
+      client.end();
     }); //  end Users.getUserById
   }); //  end pg.connect
-
-  var user_id = req.params.id;
-  Users.getUserById(user_id, function(err, result) {
-    if (!err && result.rowCount > 0) {
-      res.json(200, result.rows[0]);
-    } else if (!err) {
-      res.json(404, {error: "Error. User '" + user_id + "' does not exists."});
-    } else {
-      res.json(500, {error: err});
-    }
-
-    client.end();
-  });
 });
 
 module.exports = users;
