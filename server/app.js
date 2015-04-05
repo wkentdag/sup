@@ -1,15 +1,21 @@
-var debug = require('debug')('better');
+var express = require('express');
+var path = require('path');
+var favicon = require('static-favicon');
 var logger = require('morgan');
-var express = require('express')
-var bodyParser = require('body-parser')
-var PORT = process.env.PORT || 3000;
-var app = express();
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
 
 var users = require('./routes/users');
 var status = require('./routes/status');
 
-app.use(bodyParser.json());
+var app = express();
+
+app.use(favicon());
 app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+app.use(cookieParser());
 
 //--------- API Routes ---------
 
@@ -30,14 +36,14 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-/// error handlers:
+/// error handlers
 
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
-        res.status(err.status || 500)
-        .json('error', {
+        res.status(err.status || 500);
+        res.render('error', {
             message: err.message,
             error: err
         });
@@ -48,10 +54,11 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.json(404, {error: err.message});
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
 });
 
 
-// Start webserver on PORT
-app.listen(PORT)
-console.log('App running on port', PORT)
+module.exports = app;
