@@ -61,29 +61,49 @@ status.post('/', function(req, res) {
   }); //  end pg.connect
 });
 
-//Get statuses visible to one user
+//  GET one status in the status table by its status_id
 status.get('/:id', function(req, res) {
   pg.connect(conString, function(err, client, done) {
     if (err) {
       res.json(500, err);
     }
 
-    //  FIX ME: DB returns an error whether this variable \
-    //          is a user ID or a status ID ...???
-    var owner_id = req.params.id;
-    Status.getVisibleStatus(client, owner_id, function(err, reuslt) {
+    var status_id = req.params.id;
+    Status.getStatusById(client, status_id, function(err, result) {
+      if (!err && result.rowCount > 0) {
+        res.json(200, result.rows[0]);
+      } else if (!err) {
+        res.json(404, {error: "Error. Status " + status_id + " could not be found."});
+      } else {
+        res.json(500,{error: err});
+      }
+
+      client.end();
+    });
+  });
+});
+
+//Get all statuses posted by a user
+status.get('/u/:owner_id', function(req, res) {
+  pg.connect(conString, function(err, client, done) {
+    if (err) {
+      res.json(500, err);
+    }
+
+    var owner_id = req.params.owner_id;
+    Status.getStatusByOwner(client, owner_id, function(err, result) {
       done();
 
       if (!err && result.rowCount > 0) {
         res.json(200, result.rows);
       } else if (!err) {
-        res.json(404, {error: "Error. No visible statuses for '" + user_id});
+        res.json(404, {error: "Error. User " + owner_id + " has no viewable statuses at this time."});
       } else {
         res.json(500, {error: err});
       }
 
       client.end();
-    });   // end Status.getVisibleStatus
+    });   // end Status.getStatusByOwner
   }); //  end pg.connect
 });
 

@@ -21,19 +21,32 @@ Status.getAllStatus = function(client, cb) {
   
   query.on('error', function(err) {
     cb(err)
-  })
+  });
   query.on('row', function(row, result) {
     result.addRow(row)
-  })
+  });
   query.on('end', function(result) {
     cb(null, result.rows)
-  })
+  });
 }
 
-Status.getVisibleStatus = function(client, owner_id, cb){
+Status.getStatusById = function(client, status_id, cb) {
   var qStr = "SELECT * \
-              FROM status, statusView \
-              WHERE statusView.owner_id = $1"
+              FROM status \
+              WHERE status_id = $1";
+  client.query(qStr, [status_id], function(err, result) {
+    if (err) {
+      return cb(err);
+    } else {
+      cb(null, result);
+    }
+  });
+}
+
+Status.getStatusByOwner = function(client, owner_id, cb){
+  var qStr = "SELECT * \
+              FROM status \
+              WHERE owner_id = $1"
   
   client.query(qStr, [owner_id],function(err, result){
     if (err) return cb(err)
