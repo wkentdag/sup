@@ -9,13 +9,14 @@ each route can be viewed from localhost:3000
   
   * `GET /users` : gets all users
   * `POST /users` : adds new user (currently adds fake data from faker js.)
-  * `GET /users/id` : insert actual user id to see data for single user
+  * `GET /users/:id` : gets user with id number `id`
 
 **Statuses:**
 	
   * `GET /status` : get all statuses
   * `POST /status` : post a new status
-  * In development... `/status/id` : insert user id to see statuses visible to that user
+  * `GET /status/:status_id` : get one status with id `status_id`
+  * `GET /status/u/:owner_id` : get a list of statuses created by user `owner_id`
 
 ---
 
