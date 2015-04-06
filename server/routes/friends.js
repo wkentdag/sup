@@ -2,16 +2,14 @@ var express = require('express');
 var friends = express.Router();
 
 //  require user methods and database connection
-var Users = require('../models/User');
 var pg = require('pg');
-var user = process.env.USER;
-var pw = process.env.PW;
-var conString = "postgres://" + user + ":" + pw + "@localhost/SUP";
+var Users = require('../models/User');
+var db = require('../db');
 
 
 //	GET the entire friends table
 friends.get('/', function(req, res) {
-	pg.connect(conString, function(err, client, done) {
+	pg.connect(db, function(err, client, done) {
     if(err) {
       res.json(500, err);
     }
@@ -33,7 +31,7 @@ friends.get('/', function(req, res) {
 
 //	GET a list of one user's friends
 friends.get('/:id', function(req, res) {
-	pg.connect(conString, function(err, client, done) {
+	pg.connect(db, function(err, client, done) {
 		if (err) {
 			res.json(500, err);
 		}
@@ -58,7 +56,7 @@ friends.get('/:id', function(req, res) {
 
 //	POST a new friend relationship (uni-directional)
 friends.post('/:id', function(req, res) {
-	pg.connect(conString, function(err, client, done) {
+	pg.connect(db, function(err, client, done) {
 		if (err) {
 			res.json(500, err);
 		}
@@ -85,7 +83,7 @@ friends.post('/:id', function(req, res) {
 
 //	DELETE a friend relationship (uni-directional)
 friends.delete('/:id/:friend_id', function(req, res) {
-	pg.connect(conString, function(err, client, done) {
+	pg.connect(db, function(err, client, done) {
 		if (err) {
 			res.json(500, err);
 		}

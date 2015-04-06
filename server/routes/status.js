@@ -1,14 +1,10 @@
 var express = require('express');
 var status = express.Router();
-var Status = require('../models/Status');
-
 
 //  require user methods and database connection
-var Status = require('../models/Status');
 var pg = require('pg');
-var user = process.env.USER;
-var pw = process.env.PW;
-var conString = "postgres://" + user + ":" + pw + "@localhost/SUP";
+var Status = require('../models/Status');
+var db = require('../db');
 
 //  for development/testing only:
 var makeRandomStatus = require('../test/utils').makeRandomStatus;
@@ -16,7 +12,7 @@ var makeRandomStatus = require('../test/utils').makeRandomStatus;
 
 //Get all statuses in table
 status.get('/', function(req, res) {
-  pg.connect(conString, function(err, client, done) {
+  pg.connect(db, function(err, client, done) {
     if (err) {
       res.json(500, err);
     } 
@@ -38,7 +34,7 @@ status.get('/', function(req, res) {
 
 //Add new status with specified permission
 status.post('/', function(req, res) {
-  pg.connect(conString, function(err, client, done) {
+  pg.connect(db, function(err, client, done) {
     if (err) {
       res.json(500, err);
     }
@@ -63,7 +59,7 @@ status.post('/', function(req, res) {
 
 //  GET one status in the status table by its status_id
 status.get('/:id', function(req, res) {
-  pg.connect(conString, function(err, client, done) {
+  pg.connect(db, function(err, client, done) {
     if (err) {
       res.json(500, err);
     }
@@ -85,7 +81,7 @@ status.get('/:id', function(req, res) {
 
 //Get all statuses posted by a user
 status.get('/u/:owner_id', function(req, res) {
-  pg.connect(conString, function(err, client, done) {
+  pg.connect(db, function(err, client, done) {
     if (err) {
       res.json(500, err);
     }

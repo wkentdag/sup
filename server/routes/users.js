@@ -2,11 +2,9 @@ var express = require('express');
 var users = express.Router();
 
 //  require user methods and database connection
-var Users = require('../models/User');
 var pg = require('pg');
-var user = process.env.USER;
-var pw = process.env.PW;
-var conString = "postgres://" + user + ":" + pw + "@localhost/SUP";
+var Users = require('../models/User');
+var db = require('../db');
 
 //  for testing/development only:
 var makeRandomUser = require('../test/utils').makeRandomUser;
@@ -14,7 +12,7 @@ var makeRandomUser = require('../test/utils').makeRandomUser;
 
 //Get all users in table
 users.get('/', function(req, res) {
-  pg.connect(conString, function(err, client, done) {
+  pg.connect(db, function(err, client, done) {
     if(err) {
       res.json(500, err);
     }
@@ -36,7 +34,7 @@ users.get('/', function(req, res) {
 
 //add new user
 users.post('/', function(req, res) {
-  pg.connect(conString, function(err, client, done) {
+  pg.connect(db, function(err, client, done) {
 
     if (err) {
       res.json(500, err);
@@ -63,7 +61,7 @@ users.post('/', function(req, res) {
 
 //Get single user by id
 users.get('/:id', function(req, res) {
-  pg.connect(conString, function(err, client, done) {
+  pg.connect(db, function(err, client, done) {
     if (err) {
       res.json(500, err);
     }
