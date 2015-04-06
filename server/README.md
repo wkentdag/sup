@@ -18,6 +18,13 @@ each route can be viewed from localhost:3000
   * `GET /status/:status_id` : get one status with id `status_id`
   * `GET /status/u/:owner_id` : get a list of statuses created by user `owner_id`
 
+**Friends:**
+  
+  * `GET /friends` : gets all friend relations
+  * `GET /friends/:id` : get one user's friends (uni-directional relation for now)
+  * `POST /users/:id` : add a new friend for user `:id` (currently not verifying if the user exists and generating a random friend_id)
+  * `DELETE /users/:id/:friend_id` : delete the friend relation between the given users. Currently pulling friend_id from req.params instead of req.body for easy testing
+
 ---
 
 ##Installing Postgres

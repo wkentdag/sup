@@ -22,6 +22,10 @@ pg.connect(conString, function(err, client, done){
   var statusView = "CREATE TABLE IF NOT EXISTS statusView(\
                 user_id int,\
                 status_id int)";
+
+  var friends = "CREATE TABLE IF NOT EXISTS friends(\
+                  user_id int,\
+                  friend_id int)";
   
   client.query(user, function(err, result){
     if (err) throw err
@@ -34,6 +38,11 @@ pg.connect(conString, function(err, client, done){
   });
 
   client.query(statusView, function(err, result){
+    if (err) throw err
+    done();
+  });
+
+  client.query(friends, function(err, result){
     if (err) throw err
     done();
   });
