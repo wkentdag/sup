@@ -6,6 +6,9 @@ var Users = require('../models/User');
 var Status = require('../models/Status');
 var db = require('../db');
 
+//  for testing/development only:
+var makeRandomStatusView = require('../test/utils').makeRandomStatusView;
+
 
 //	Get all rows in the table
 sv.get('/', function(req, res) {
@@ -35,20 +38,33 @@ sv.post('/', function(req, res) {
 			return res.json(500, err);
 		}
 
-		//	TODO: setup req.body
-		// var status = req.body.status;
-		// var user = req.body.user;
-		var status = 123;
-		var user = 444;
-		Status.addStatusView(client, user, status, function(err, result) {
-			done();
+		// var statusView = makeRandomStatusView;
+		var statusView = {};
+		statusView.status_id = req.body.status;
+		statusView.user_id = req.body.user;
 
-			if (err) {
-				return res.json(500, err);
+		Users.getUserById(client, statusView.user_id, function(err, result) {
+			// done();
+
+			if (!err && result.rowCount > 0) {
+				Status.addStatusView(client, statusView.user, statusView.status, function(err, result) {
+					done();
+
+					if (err) {
+						return res.json(500, err);
+					}
+
+					res.json(201, {result: "Added " + result.rowCount + " to the statusView table"});
+				});	//	end Status.add
+
+			} else if (!err) {
+				res.json(404, {error: "user " + statusView.user_id + " not found"});
+			} else {
+				res.json(500, err);
 			}
+		});	//	end getUserById
 
-			res.json(201, result);
-		});	//	end Status.add
+		client.end();
 	});	//	end pg.connect
 });
 

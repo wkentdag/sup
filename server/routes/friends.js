@@ -1,5 +1,7 @@
 var express = require('express');
 var friends = express.Router();
+var superagent = require('superagent');
+var root_url = require('../config/config').root_url;
 
 //  require user methods and database connection
 var pg = require('pg');
@@ -11,7 +13,7 @@ var db = require('../db');
 friends.get('/', function(req, res) {
 	pg.connect(db, function(err, client, done) {
     if(err) {
-      res.json(500, err);
+      return res.json(500, err);
     }
 
     Users.getAllFriendships(client, function(err, result) {
@@ -19,9 +21,8 @@ friends.get('/', function(req, res) {
       done();
 
       if (err) {
-        res.json(500, err);
+        return res.json(500, err);
       }
-      // console.log('success!\t', result);
       res.json(200, result);
 
       client.end();
@@ -33,52 +34,127 @@ friends.get('/', function(req, res) {
 friends.get('/:id', function(req, res) {
 	pg.connect(db, function(err, client, done) {
 		if (err) {
-			res.json(500, err);
+			return res.json(500, err);
 		}
 
 		var user_id = req.params.id;
-		Users.getFriends(client, user_id, function(err, result) {
-			done();
 
-			//	TODO: verify whether the user actually exists first!
-			if (!err && result.rowCount > 0) {
-        res.json(200, result.rows);
-      } else if (!err) {
-        res.json(404, {error: "Error. User " + user_id + " has no friends at this time."});
-      } else {
-        res.json(500, {error: err});
-      }
+		Users.getUserById(client, user_id, function(err, result) {
+			if (!err && result.rowCount > 0 ) {
 
-      client.end();
-		});
-	});
+				Users.getFriends(client, user_id, function(err, result) {
+					done();
+
+					if (!err && result.rowCount > 0) {
+		        res.json(200, result.rows);
+		      } else if (!err) {
+		        res.json(404, {error: "Error. User " + user_id + " has no friends at this time."});
+		      } else {
+
+  					console.log('hello from getFriends 500\t', err);
+		        res.json(500, {error: err});
+		      }
+				});	//	end Users.getFriends
+
+			} else if (!err) {
+        return res.json(404, {error: "Error. User '" + user_id + "' does not exist."});
+			} else {
+
+				console.log('hello from getUserById 500\t', err);
+				return res.json(500, {error: err});
+			}
+
+			client.end();
+		});	//	end Users.getUserById
+	});	//	end pg.connect
 });
 
 //	POST a new friend relationship (uni-directional)
 friends.post('/:id', function(req, res) {
 	pg.connect(db, function(err, client, done) {
 		if (err) {
-			res.json(500, err);
+			console.log('error connecting', err);
+			done();
+			return res.json(500, err);
 		}
 
 		var user_id = req.params.id;
+		var friend_id = req.body.friend_id;
+		console.log('friend id\t', friend_id);
+		// var friend_id = Math.floor(Math.random() * (9999 - 1 + 1)) + 1;
 
-		//	TODO: add a fake friend_id into req.body
-		// var friend_id = req.body.friend_id;
-		var friend_id = Math.floor(Math.random() * (9999 - 1 + 1)) + 1;
-
-		Users.addFriend(client, user_id, friend_id, function(err, result) {
-			done();
-
+		//	verify that user exists
+		superagent.get('http://' + root_url + '/users/' + user_id).end(function(err, result) {
 			if (err) {
-				res.json(500, err);
+				return res.json(500, err);
 			}
 
-			//	FIX ME: why does this not return the new friend id?
-			res.json(200, result.rows);
-			client.end();
-		});
-	});
+			var resJson = JSON.parse(result.text);
+			var statusCode = result.statusCode;
+
+			//	if the users exists, verify the friend as well
+			if (resJson && statusCode === 200) {
+
+				superagent.get('http://' + root_url + '/users/' + friend_id).end(function(err, result) {
+					if (err) {
+						return res.json(500, err);
+					}
+
+					resJson = JSON.parse(result.text);
+					statusCode = result.statusCode;
+
+					console.log('resJson\t', resJson, '\nstatusCode', statusCode);
+					if (resJson && statusCode === 200) {
+						Users.addFriend(client, user_id, friend_id, function(err, result) {
+							console.log('hello from add friends', err, result);
+							done();
+							if (err) {
+								return res.json(500, err);
+							} else {
+								res.json(201, result.rows);
+							}
+						});	//	end Users.addFriend
+						
+					} else {
+						res.json(statusCode, resJson);
+					}
+
+				});	//	end SA.get friend id
+			} else {
+				//	if the user doesn't exist or there was a server error, forward it 
+				res.json(statusCode, resJson);
+			}	
+		});	//	end SA.get user id
+
+
+		//	TODO: should we verify if the friend exists too?
+		// Users.getUserById(client, user_id, function(err, result) {
+		// 	console.log('helo from inside getUserById');
+
+		// 	if (!err && result.rowCount > 0) {
+		// 		// done();
+		// 		console.log('nest1', user_id, friend_id, err, result.rows);
+		// 		res.send('success!', result.rows);
+				
+
+		// 	} else if (!err) {
+
+		// 		console.log('nest2', user_id, friend_id, err, result);
+		// 		done();
+		// 		res.json(404, {error: "Error. User '" + user_id + "' does not exist."});
+
+		// 	} else {
+
+		// 		console.log('nest3', user_id, friend_id, err, result);
+		// 		done();
+		// 		res.json(500, err);
+
+		// 	}
+
+		// 	client.end();
+		// });	//	end Users.getUesrById
+
+	});	//	end pg.connect
 });
 
 //	DELETE a friend relationship (uni-directional)
