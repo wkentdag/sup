@@ -34,38 +34,46 @@ friends.get('/', function(req, res) {
 friends.get('/:id', function(req, res) {
 	pg.connect(db, function(err, client, done) {
 		if (err) {
+			console.log('error connecting', err);
+			done();
 			return res.json(500, err);
 		}
 
 		var user_id = req.params.id;
 
-		Users.getUserById(client, user_id, function(err, result) {
-			if (!err && result.rowCount > 0 ) {
+		//	verify that the user exists
+		api.get('/users/' + user_id, function(err, result, statusCode) {
+			if (err) {
+				return res.json(500, err);
+			}
 
+			//	if true, query their friends
+			if (result && statusCode === 200) {
 				Users.getFriends(client, user_id, function(err, result) {
 					done();
 
 					if (!err && result.rowCount > 0) {
-		        res.json(200, result.rows);
+						var friends = [];
+						for (var rel in result.rows) {
+							friends.push(result.rows[rel].friend_id);
+						}
+		        res.json(200, {"friends": friends});
 		      } else if (!err) {
-		        res.json(404, {error: "Error. User " + user_id + " has no friends at this time."});
+		        res.json(404, {error: "User " + user_id + " has no friends :/ "});
 		      } else {
-
-  					console.log('hello from getFriends 500\t', err);
 		        res.json(500, {error: err});
 		      }
+
+    			client.end();
 				});	//	end Users.getFriends
 
-			} else if (!err) {
-        return res.json(404, {error: "Error. User '" + user_id + "' does not exist."});
+			//	if false, forward the 404/500 error
 			} else {
 
-				console.log('hello from getUserById 500\t', err);
-				return res.json(500, {error: err});
+				//	FIXME: why does err === null?
+				return res.json(statusCode, {error: err});
 			}
-
-			client.end();
-		});	//	end Users.getUserById
+		});	//	end api.get user id
 	});	//	end pg.connect
 });
 
@@ -94,10 +102,9 @@ friends.post('/:id', function(req, res) {
 				api.get('/users/' + friend_id, function(err, result, statusCode) {
 					if (err) {
 						return res.json(500, err);
-					}
 
-					//	if the friend exists too...
-					if (result && statusCode === 200) {
+					//	if the friend exists...
+					}	else if (!err && result && statusCode === 200) {
 
 						//	...add the friendship to the table
 						//	FIXME: verify that they aren't already friends & return 403 if they are
@@ -125,35 +132,48 @@ friends.post('/:id', function(req, res) {
 });
 
 //	DELETE a friend relationship (uni-directional)
-friends.delete('/:id/:friend_id', function(req, res) {
+friends.delete('/:id', function(req, res) {
 	pg.connect(db, function(err, client, done) {
 		if (err) {
-			res.json(500, err);
+			console.log('error connecting', err);
+			done();
+			return res.json(500, err);
 		}
 
 		var user_id = req.params.id;
+		var friend_id = req.body.friend_id;
 
-		//	TODO: add a fake friend_id into req.body, remove
-		//				friend_id from req.params
-		// var friend_id = req.body.friend_id;
-		// var friend_id = Math.floor(Math.random() * (9999 - 1 + 1)) + 1;
-		//	^ random generator
-		//	
-		var friend_id = req.params.friend_id;
-
-		Users.deleteFriend(client, user_id, friend_id, function(err, result) {
-			done();
-
+		//	verify that the user exists first
+		api.get('/users/' + user_id, function(err, result, statusCode) {
 			if (err) {
-				res.json(500, err);
-			}
+				return res.json(500, err);
 
-			//	TODO: verify that deletion has actually occurred;
-			//				send 404 if no error but no deletion
-			res.json(200, result.rows);
-			client.end();
-		});
-	});
+			//	if the user exists...
+			} else if (!err && result && statusCode === 200) {
+				api.get('/users/' + friend_id, function(err, result, statusCode) {
+					if (err) {
+						return res.json(500, err);
+					} else if (!err && result && statusCode === 200) {
+						Users.deleteFriend(client, user_id, friend_id, function(err, result) {
+							done();
+
+							if (err) {
+								return res.json(500, err);
+							} else {
+								res.json(204, "Friend relationship deleted");
+							}
+
+							client.end();
+						});
+					} else {
+						res.json(statusCode, result);
+					}
+				});	//	end api.get friend id
+			} else {
+				return res.json(statusCode, result);
+			}
+		});	//	end api.get user id
+	});	//	end pg.connect
 });
 
 module.exports = friends;
