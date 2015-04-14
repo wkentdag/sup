@@ -5,7 +5,8 @@ var root_url = require('../config/config').root_url;
 var intra = {};
 
 intra.get = function(url, cb) {
-	superagent.get(url).end(function(err, result) {
+	var fullUrl = 'http://' + root_url + url;
+	superagent.get(fullUrl).end(function(err, result) {
 		if (err) {
 			cb(err);
 		} else {
@@ -14,3 +15,5 @@ intra.get = function(url, cb) {
 	});
 }
 
+
+module.exports = intra;
