@@ -107,4 +107,16 @@ Status.addStatusView = function(client, user_id, status_id, cb) {
   });
 }
 
+Status.getOneView = function(client, user_id, status_id, cb) {
+  var sv = [user_id, status_id];
+  var qStr = "SELECT * FROM statusView WHERE user_id = $1 AND status_id = $2";
+  client.query(qStr, sv, function(err, result) {
+    if (err) {
+      cb(err);
+    } else {
+      cb(null, result.rows[0]);
+    }
+  });
+}
+
 module.exports = Status;
