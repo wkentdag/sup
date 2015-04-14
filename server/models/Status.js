@@ -87,7 +87,7 @@ Status.getViewersByStatus = function(client, status_id, cb) {
   });
 }
 
-Status.getStatusByUser = function(client, user_id, cb) {
+Status.getVisibleStatuses = function(client, user_id, cb) {
   var qStr = "SELECT * FROM statusView WHERE user_id = $1";
   client.query(qStr, [user_id], function(err, result) {
     if (err) {

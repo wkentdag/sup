@@ -33,40 +33,60 @@ sv.get('/', function(req, res) {
 	});	//	end pg.connect
 });
 
-//	POST a new status to the table
+//	POST a new status-user relationship to the table
 sv.post('/', function(req, res) {
 	pg.connect(db, function(err, client, done) {
 		if (err) {
-			return res.json(500, err);
+			done();
+			return res.json(500, {error: err});
 		}
 
-		// var statusView = makeRandomStatusView;
-		var statusView = {};
-		statusView.status_id = req.body.status;
-		statusView.user_id = req.body.user;
+		var status_id = req.body.status_id;
+		var user_id = req.body.user_id;
 
-		Users.getUserById(client, statusView.user_id, function(err, result) {
-			// done();
+		//	verify that the user exists
+		api.get('/users/' + user_id, function(err, result, statusCode) {
+			if (err) {
+				return res.json(500, {error: err});
+			} else if (!err && result && statusCode === 200) {
 
-			if (!err && result.rowCount > 0) {
-				Status.addStatusView(client, statusView.user, statusView.status, function(err, result) {
-					done();
-
+				//	if true, verify that the status exists as well
+				api.get('/status/' + status_id, function(err, result, statusCode) {
 					if (err) {
-						return res.json(500, err);
+						return res.json(500, {error: err});
+					} else if (!err && result && statusCode === 200) {
+
+						//	if the user exists AND the status exists, 
+						//	verify that the user is the status's owner
+						if ( !(user_id == result.status.owner_id) ) {
+							
+							//	if the user id != status.owner_id, the request is forbidden
+							//	because only the owner can set view permissions
+							res.json(403, {error: "user " +user_id + " does not have permission to share status " + status_id});
+						} else {
+
+							//	process the request
+							Status.addStatusView(client, user_id, status_id, function(err, result) {
+								done();
+
+								if (err) {
+									return res.json(500, err);
+								} else {
+									res.json(201, {result: "Added " + result.rowCount + " to the statusView table"});			
+								}
+
+								client.end();
+							});	//	end Status.add
+
+						}
+					} else {
+						return res.json(statusCode, result);
 					}
-
-					res.json(201, {result: "Added " + result.rowCount + " to the statusView table"});
-				});	//	end Status.add
-
-			} else if (!err) {
-				res.json(404, {error: "user " + statusView.user_id + " not found"});
+				});	//	end api.get user id
 			} else {
-				res.json(500, err);
+				return res.json(statusCode, result);
 			}
-		});	//	end getUserById
-
-		client.end();
+		});	//	end api.get status id
 	});	//	end pg.connect
 });
 
@@ -122,22 +142,39 @@ sv.get('/:status_id', function(req, res) {
 sv.get('/:status_id/viewers', function(req, res) {
 	pg.connect(db, function(err, client, done) {
 		if (err) {
+			done();
 			return res.json(500, {error: err});
 		}
 
+		//	verify that the status exists
 		var status_id = req.params.status_id;
-
-		Status.getViewersByStatus(client, status_id, function(err, result) {
-			done();
-
+		api.get('/status/' + status_id, function(err, result, statusCode) {
 			if (err) {
-				return res.json(500, err);
+				return res.json(500, {error: err});
+			} else if (!err && result && statusCode === 200) {
+
+				//	process the request
+				Status.getViewersByStatus(client, status_id, function(err, result) {
+					done();
+
+					if (!err && result.length > 0) {
+						var viewers = [];
+						for (var rel in result) {
+							viewers.push(result[rel].user_id);
+						}
+						res.json(200, viewers);
+					} else if (!err) {
+						res.json(404, {error: "status " + status_id + " has no viewers"});
+					} else {
+						res.json(500, {error: err});
+					}
+
+					client.end();
+				});	//	end Status.getViewers
+			} else {
+				res.json(statusCode, result);
 			}
-
-			res.json(200, result);
-
-			client.end();
-		});	//	end Status.getViewers
+		});	//	end api.get status id	
 	});	//	end pg.connect
 });
 
@@ -148,19 +185,37 @@ sv.get('/u/:user_id', function(req, res) {
 			return res.json(500, {error: err});
 		}
 
+		//	verify that the user exists
 		var user_id = req.params.user_id;
-
-		Status.getStatusByUser(client, user_id, function(err, result) {
-			done();
-
+		api.get('/users/' + user_id, function(err, result, statusCode) {
 			if (err) {
-				return res.json(500, err);
+				return res.json(500, {error: err});
 			}
 
-			res.json(200, result);
+			if (result && statusCode === 200) {
 
-			client.end();
-		});	//	end Status.getViewers
+				//	process the request
+				Status.getVisibleStatuses(client, user_id, function(err, result) {
+					done();
+
+					if (!err && result.length > 0) {
+						var statuses = [];
+						for (var rel in result) {
+							statuses.push(result[rel].status_id);
+						}
+						res.json(200, {statuses: statuses});
+					} else if (!err) {
+						res.json(404, {error: "user " + user_id + " has no visible statuses"});
+					} else {
+						res.json(500, {error: err});
+					}
+
+					client.end();
+				});
+			} else {
+				return res.json(statusCode, {error: err});
+			}
+		});	//	end api.get user id
 	});	//	end pg.connect
 });
 

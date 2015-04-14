@@ -10,7 +10,18 @@ intra.get = function(url, cb) {
 		if (err) {
 			cb(err);
 		} else {
-			cb(null, result.text, result.statusCode);
+			cb(null, JSON.parse(result.text), result.statusCode);
+		}
+	});
+}
+
+intra.post = function(url, params, cb) {
+	var fullUrl = 'http://' + root_url + url;
+	superagent.post(fullUrl).send(params).end(function(err, result) {
+		if (err) {
+			cb(err);
+		} else {
+			cb(null, JSON.parse(result.text), result.statusCode);
 		}
 	});
 }
