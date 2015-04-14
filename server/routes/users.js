@@ -10,11 +10,11 @@ var db = require('../db');
 var makeRandomUser = require('../test/utils').makeRandomUser;
 
 
-//Get all users in table
+//GET all users in table
 users.get('/', function(req, res) {
   pg.connect(db, function(err, client, done) {
-    if(err) {
-      res.json(500, err);
+    if (err) {
+      return res.json(500, {error: err});
     }
 
     Users.getAllUsers(client, function(err, result) {
@@ -22,48 +22,47 @@ users.get('/', function(req, res) {
       done();
 
       if (err) {
-        res.json(500, err);
+        res.json(500, {error: err});
+      } else {
+        res.json(200, {users: result});   
       }
-      // console.log('success!\t', result);
-      res.json(200, result);
 
       client.end();
     }); //  end Users.getAllUsers
   }); //  end pg.connect
 });
 
-//add new user
+//POST a new user to the table
 users.post('/', function(req, res) {
   pg.connect(db, function(err, client, done) {
 
     if (err) {
-      res.json(500, err);
+      return res.json(500, {error: err});
     }
 
     // TODO: when POSTing is set up on the client, uncomment the line below instead of makeRandomUser()
-    // var usrObj = req.body;
+    // var usrObj = req.body.user;
     var usrObj = makeRandomUser();
 
     Users.addUser(client, usrObj, function(err, result) {
       done();
 
       if (err) {
-        res.json(500, err);
+        res.json(500, {error: err});
+      } else {
+        res.json(201, {message: "added " + result.rowCount + " new user"});      
       }
-
-      // console.log('success!\t', result);
-      res.json(200, "done.");
 
       client.end();
     });   //  end Users.addUser
   }); //  end pg.connect
 });
 
-//Get single user by id
+//GET single user by id
 users.get('/:id', function(req, res) {
   pg.connect(db, function(err, client, done) {
     if (err) {
-      return res.json(500, err);
+      return res.json(500, {error: err});
     }
 
     var user_id = req.params.id;
@@ -71,10 +70,10 @@ users.get('/:id', function(req, res) {
       done();
 
       if (!err && result.rowCount > 0) {
-        res.json(200, result.rows[0]);
+        res.json(200, {user: result.rows[0]});
 
       } else if (!err) {
-        res.json(404, {error: "User " + user_id + " does not exist."});
+        res.json(404, {error: "user " + user_id + " does not exist"});
 
       } else {
         res.json(500, {error: err});

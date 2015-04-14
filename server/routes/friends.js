@@ -13,7 +13,7 @@ var db = require('../db');
 friends.get('/', function(req, res) {
 	pg.connect(db, function(err, client, done) {
     if(err) {
-      return res.json(500, err);
+      return res.json(500, {error: err});
     }
 
     Users.getAllFriendships(client, function(err, result) {
@@ -21,9 +21,9 @@ friends.get('/', function(req, res) {
       done();
 
       if (err) {
-        return res.json(500, err);
+        return res.json(500, {error: err});
       }
-      res.json(200, result);
+      res.json(200, {friendships: result});
 
       client.end();
     }); //  end Users.getAllFriendships
@@ -36,7 +36,7 @@ friends.get('/:id', function(req, res) {
 		if (err) {
 			console.log('error connecting', err);
 			done();
-			return res.json(500, err);
+			return res.json(500, {error: err});
 		}
 
 		var user_id = req.params.id;
@@ -44,7 +44,7 @@ friends.get('/:id', function(req, res) {
 		//	verify that the user exists
 		api.get('/users/' + user_id, function(err, result, statusCode) {
 			if (err) {
-				return res.json(500, err);
+				return res.json(500, {error: err});
 			}
 
 			//	if true, query their friends
@@ -57,7 +57,7 @@ friends.get('/:id', function(req, res) {
 						for (var rel in result.rows) {
 							friends.push(result.rows[rel].friend_id);
 						}
-		        res.json(200, {"friends": friends});
+		        res.json(200, {friends: friends});
 		      } else if (!err) {
 		        res.json(404, {error: "User " + user_id + " has no friends :/ "});
 		      } else {
@@ -83,7 +83,7 @@ friends.post('/:id', function(req, res) {
 		if (err) {
 			console.log('error connecting', err);
 			done();
-			return res.json(500, err);
+			return res.json(500, {error: err});
 		}
 
 		var user_id = req.params.id;
@@ -92,7 +92,7 @@ friends.post('/:id', function(req, res) {
 		//	verify that user exists
 		api.get('/users/' + user_id, function(err, result, statusCode) {
 			if (err) {
-				return res.json(500, err);
+				return res.json(500, {error: err});
 			}
 
 			//	if the users exists...
@@ -101,7 +101,7 @@ friends.post('/:id', function(req, res) {
 				//	...verify that the friend exists as well
 				api.get('/users/' + friend_id, function(err, result, statusCode) {
 					if (err) {
-						return res.json(500, err);
+						return res.json(500, {error: err});
 
 					//	if the friend exists...
 					}	else if (!err && result && statusCode === 200) {
@@ -112,9 +112,9 @@ friends.post('/:id', function(req, res) {
 							done();
 
 							if (err) {
-								return res.json(500, err);
+								return res.json(500, {error: err});
 							} else {
-								res.json(201, "Added " + result.rows + " friend relationship");
+								res.json(201, {message: "added " + result.rowCount + " friend relationship"});
 							}
 
 							client.end();
@@ -137,7 +137,7 @@ friends.delete('/:id', function(req, res) {
 		if (err) {
 			console.log('error connecting', err);
 			done();
-			return res.json(500, err);
+			return res.json(500, {error: err});
 		}
 
 		var user_id = req.params.id;
@@ -146,21 +146,21 @@ friends.delete('/:id', function(req, res) {
 		//	verify that the user exists first
 		api.get('/users/' + user_id, function(err, result, statusCode) {
 			if (err) {
-				return res.json(500, err);
+				return res.json(500, {error: err});
 
 			//	if the user exists...
 			} else if (!err && result && statusCode === 200) {
 				api.get('/users/' + friend_id, function(err, result, statusCode) {
 					if (err) {
-						return res.json(500, err);
+						return res.json(500, {error: err});
 					} else if (!err && result && statusCode === 200) {
 						Users.deleteFriend(client, user_id, friend_id, function(err, result) {
 							done();
 
 							if (err) {
-								return res.json(500, err);
+								return res.json(500, {error: err});
 							} else {
-								res.json(204, "Friend relationship deleted");
+								res.json(204, {message: "friend relationship deleted"});
 							}
 
 							client.end();
