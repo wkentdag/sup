@@ -43,7 +43,7 @@ Status.getStatusById = function(client, status_id, cb) {
   });
 }
 
-Status.getStatusByOwner = function(client, owner_id, cb){
+Status.getStatusesByOwner = function(client, owner_id, cb){
   var qStr = "SELECT * \
               FROM status \
               WHERE owner_id = $1"
