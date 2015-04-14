@@ -63,7 +63,7 @@ users.post('/', function(req, res) {
 users.get('/:id', function(req, res) {
   pg.connect(db, function(err, client, done) {
     if (err) {
-      res.json(500, err);
+      return res.json(500, err);
     }
 
     var user_id = req.params.id;
@@ -74,7 +74,7 @@ users.get('/:id', function(req, res) {
         res.json(200, result.rows[0]);
 
       } else if (!err) {
-        res.json(404, {error: "Error. User '" + user_id + "' does not exist."});
+        res.json(404, {error: "User " + user_id + " does not exist."});
 
       } else {
         res.json(500, {error: err});

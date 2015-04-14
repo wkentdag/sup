@@ -18,5 +18,14 @@ var makeRandomUser = function makeRandomUser() {
   return fakeUser;
 }
 
+var makeRandomStatusView = function makeRandomStatusView() {
+  var sv = {};
+  sv.user = faker.random.number(1000);
+  sv.status = faker.random.number(1000);
+
+  return sv;
+}
+
 module.exports.makeRandomUser = makeRandomUser;
 module.exports.makeRandomStatus = makeRandomStatus;
+module.exports.makeRandomStatusView = makeRandomStatusView;
