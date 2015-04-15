@@ -41,6 +41,8 @@ sv.post('/', function(req, res) {
 			return res.json(500, {error: err});
 		}
 
+		//	FIX ME: this route msut be private to the user_id,
+		//					but the user_id param is mostly for other users
 		var status_id = req.body.status_id;
 		var user_id = req.body.user_id;
 
