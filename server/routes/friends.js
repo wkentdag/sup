@@ -30,8 +30,14 @@ friends.get('/', function(req, res) {
   }); //  end pg.connect
 });
 
-//	GET a list of one user's friends
+//	TODO: add this route
+//	GET one row/friend relationship (for sharing permissions)
 friends.get('/:id', function(req, res) {
+	res.json(500);
+});
+
+//	GET a list of one user's friends
+friends.get('/u/:id', function(req, res) {
 	pg.connect(db, function(err, client, done) {
 		if (err) {
 			console.log('error connecting', err);
@@ -69,14 +75,13 @@ friends.get('/:id', function(req, res) {
 
 			//	if false, forward the 404/500 error
 			} else {
-
-				//	FIXME: why does err === null?
-				return res.json(statusCode, {error: err});
+				return res.json(statusCode, result);
 			}
 		});	//	end api.get user id
 	});	//	end pg.connect
 });
 
+//	FIX ME: dont allow to add yourself or th same rel twice
 //	POST a new friend relationship (uni-directional)
 friends.post('/:id', function(req, res) {
 	pg.connect(db, function(err, client, done) {
