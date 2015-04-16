@@ -374,7 +374,6 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 - <a name="friendsid-get">**`/friends/:id`**</a>
     - **Method**: GET
     - **Description:** Get one friend relationship from the table
-    	- **NOTE**: see [issue #9](https://github.com/wkentdag/sup/issues/9): this route doesn't exist yet
     - **Params:** `id`: *integer*, a user ID number
     - **Request body:** `friend_id`: *integer*, a friends ID number
     - **Content-Type**: application/json
@@ -383,7 +382,7 @@ To make and delete database (also works to clear the db and start fresh): `dropd
   		-	**status code**: `200`
   		-	**data sample:** 	
 		  ```
-		friendship: 
+		rel: 
 			{
 				user_id: 3546,
 				friend_id: 1456

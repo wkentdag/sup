@@ -78,6 +78,18 @@ Users.getFriends = function(client, user_id, cb) {
 	});
 }
 
+Users.getOneFriendship = function(client, user_id, friend_id, cb) {
+  var sv = [user_id, friend_id];
+  var qStr = "SELECT * FROM friends WHERE user_id = $1 AND friend_id = $2";
+  client.query(qStr, sv, function(err, result) {
+    if (err) {
+      cb(err);
+    } else {
+      cb(null, result.rows[0]);
+    }
+  });
+}
+
 //  INSERT a new friendship into the friends table
 Users.addFriend = function(client, user_id, friend_id, cb) {
 	var friends = [user_id, friend_id];
