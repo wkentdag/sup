@@ -158,6 +158,7 @@ status.get('/:id/viewers', function(req, res) {
 
 //  POST a new user to the list of viewers for a given status
 //    @param id; a status's ID number
+//    @param user_id: a user's id number to be given permission
 status.post('/:id/viewers', function(req, res) {
   pg.connect(db, function(err, client, done) {
     if (err) {

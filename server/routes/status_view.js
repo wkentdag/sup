@@ -24,7 +24,7 @@ sv.get('/', function(req, res) {
       if (err) {
         res.json(500, err);
       } else {
-				res.json(200, result);   	
+				res.json(200, {permissions: result});   	
       }
 
       client.end();

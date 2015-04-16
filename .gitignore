@@ -1,4 +1,2 @@
-/server/data/
-/server/node_modules/
-/pg-server/node_modules/
+node_modules
 *.log
