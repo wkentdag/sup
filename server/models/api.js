@@ -1,10 +1,9 @@
 var superagent = require('superagent');
 var root_url = require('../config/config').root_url;
 
+var api = {};
 
-var intra = {};
-
-intra.get = function(url, cb) {
+api.get = function(url, cb) {
 	var fullUrl = 'http://' + root_url + url;
 	superagent.get(fullUrl).end(function(err, result) {
 		if (err) {
@@ -15,7 +14,7 @@ intra.get = function(url, cb) {
 	});
 }
 
-intra.post = function(url, params, cb) {
+api.post = function(url, params, cb) {
 	var fullUrl = 'http://' + root_url + url;
 	superagent.post(fullUrl).send(params).end(function(err, result) {
 		if (err) {
@@ -27,4 +26,4 @@ intra.post = function(url, params, cb) {
 }
 
 
-module.exports = intra;
+module.exports = api;

@@ -1,15 +1,19 @@
 var express = require('express');
 var status = express.Router();
-
-//  require user methods and database connection
 var pg = require('pg');
-var Status = require('../models/Status');
 var db = require('../db');
-var api = require('../models/intra');
+var Status = require('../models/Status');
+var api = require('../models/api');
 
 //  for development/testing only:
 var makeRandomStatus = require('../test/utils').makeRandomStatus;
 
+
+/**
+  *
+  * Basic status routes
+  *
+**/
 
 //  GET all statuses in table
 status.get('/', function(req, res) {
@@ -33,7 +37,11 @@ status.get('/', function(req, res) {
   }); //  end pg.connect
 });
 
+//    TODO: in production, change owner_id to status, when
+//          the details of the status besides the owner_id are not fake
+
 //  POST a new status to the table
+//    @param owner_id: ID number of the user who is posting the status
 status.post('/', function(req, res) {
   pg.connect(db, function(err, client, done) {
     if (err) {
@@ -75,7 +83,8 @@ status.post('/', function(req, res) {
   }); //  end pg.connect
 });
 
-//  GET one status in the status table by its status_id
+//  GET one status
+//    @param id: a status's ID number
 status.get('/:id', function(req, res) {
   pg.connect(db, function(err, client, done) {
     if (err) {
@@ -97,38 +106,113 @@ status.get('/:id', function(req, res) {
   });
 });
 
-//  GET all statuses posted by a user
-status.get('/u/:owner_id', function(req, res) {
+
+/**
+  *
+  * Viewing routes
+  *
+**/
+
+//  GET a list of users who have permission to view a status
+//    @param id: a status's ID number
+status.get('/:id/viewers', function(req, res) {
   pg.connect(db, function(err, client, done) {
     if (err) {
+      done();
       return res.json(500, {error: err});
     }
 
-    var owner_id = req.params.owner_id;
-
-    //  make sure owner exists
-    api.get('/users/' + owner_id, function(err, result, statusCode) {
+    //  verify that the status exists
+    var status_id = req.params.id;
+    api.get('/status/' + status_id, function(err, result, statusCode) {
       if (err) {
         return res.json(500, {error: err});
-
       } else if (!err && result && statusCode === 200) {
-        Status.getStatusesByOwner(client, owner_id, function(err, result) {
+
+        //  process the request
+        Status.getViewersByStatus(client, status_id, function(err, result) {
           done();
 
-          if (!err && result.rowCount > 0) {
-            res.json(200, {statuses: result.rows});
+          if (!err && result.length > 0) {
+            var viewers = [];
+            for (var rel in result) {
+              viewers.push(result[rel].user_id);
+            }
+            res.json(200, viewers);
           } else if (!err) {
-            res.json(404, {error: "user " + owner_id + " has no statuses"});
+            res.json(404, {error: "status " + status_id + " has no viewers"});
           } else {
             res.json(500, {error: err});
           }
 
           client.end();
-        });   // end Status.getStatusByOwner
+        }); //  end Status.getViewers
       } else {
         res.json(statusCode, result);
       }
-    }); //  end api get owner id
+    }); //  end api.get status id 
+  }); //  end pg.connect
+});
+
+//  TODO: check to see if the relation already exists; return 403 if true
+
+//  POST a new user to the list of viewers for a given status
+//    @param id; a status's ID number
+status.post('/:id/viewers', function(req, res) {
+  pg.connect(db, function(err, client, done) {
+    if (err) {
+      done();
+      return res.json(500, {error: err});
+    }
+
+    //  FIX ME: this route msut be private to the user_id,
+    //          but the user_id param is mostly for other users
+    var status_id = req.params.id;
+    var user_id = req.body.user_id;
+
+    //  verify that the user exists
+    api.get('/users/' + user_id, function(err, result, statusCode) {
+      if (err) {
+        return res.json(500, {error: err});
+      } else if (!err && result && statusCode === 200) {
+
+        //  if true, verify that the status exists as well
+        api.get('/status/' + status_id, function(err, result, statusCode) {
+          if (err) {
+            return res.json(500, {error: err});
+          } else if (!err && result && statusCode === 200) {
+
+            //  if the user exists AND the status exists, 
+            //  verify that the user is the status's owner
+            if ( !(user_id == result.status.owner_id) ) {
+              
+              //  if the user id != status.owner_id, the request is forbidden
+              //  because only the owner can set view permissions
+              res.json(403, {error: "user " +user_id + " does not have permission to share status " + status_id});
+            } else {
+
+              //  process the request
+              Status.addStatusView(client, user_id, status_id, function(err, result) {
+                done();
+
+                if (err) {
+                  return res.json(500, err);
+                } else {
+                  res.json(201, {result: "Added " + result.rowCount + " user to status " + status_id + "'s visibility permissions"});     
+                }
+
+                client.end();
+              }); //  end Status.add
+
+            }
+          } else {
+            return res.json(statusCode, result);
+          }
+        }); //  end api.get user id
+      } else {
+        return res.json(statusCode, result);
+      }
+    }); //  end api.get status id
   }); //  end pg.connect
 });
 
