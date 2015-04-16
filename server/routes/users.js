@@ -296,7 +296,7 @@ users.get('/:id/visible', function(req, res) {
           client.end();
         });
       } else {
-        return res.json(statusCode, {error: err});
+        return res.json(statusCode, result);
       }
     }); //  end api.get user id
   }); //  end pg.connect
