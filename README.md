@@ -1,9 +1,38 @@
 # sup api
 
+This is the API server for SUP. Client repo [here](https://github.com/sbwf/sup-client)
+
 Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 
-[Good api practices](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
-)
+##Setup
+
+After installing  `node`, `postgres`, and cloning the repo:
+
+
+Initialize the database:
+
+```
+$ postgres -D /usr/local/var/postgres
+$ createdb SUP
+```
+
+In a separate terminal window...
+
+
+```
+$ cd path/to/sup
+$ npm install
+$ node setTables.js   # only needs to be run once on setup
+$ npm start
+
+```
+
+Point your browser to `localhost:3000` and start exploring the routes!
+
+To check if the database is running: `ps aux | grep postgres`
+
+To make and delete database (also works to clear the db and start fresh): `dropdb SUP`, `createdb SUP`
+
 
 ##Routes
 
@@ -36,7 +65,7 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 
 
 
-#### <a name="users">Users</a>:
+### <a name="users">Users</a>:
 
 - <a name="users-get">**`/users`**</a>
 	- **Method:** GET
@@ -223,6 +252,9 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 	-	Error:
 		-	**status code**: `404`
 		-	**message**: user doesn't exist, or they have no visible statuses
+
+### <a name="status">Status</a>:
+
 		
 - <a name="status-get">**`/status`**</a>
     - **Method**: GET
@@ -315,7 +347,9 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**status code**: `404`
 		-	**message**: status doesn't exist
 		
+### <a name="friends">Friends</a>:
 		
+
 - <a name="friends-get">**`/friends`**</a>
     - **Method**: GET
     - **Description:** Get an array of all friend relationships in the table
@@ -354,6 +388,9 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 	-	Error:
 		-	**status code**: `404`
 		-	**message**: users aren't friends
+
+### <a name="sv">Status View (sv)</a>:
+
 
 - <a name="sv-get">**`/sv`**</a>
     - **Method**: GET
@@ -394,35 +431,5 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 
 ### database schema:
 ![database schema diagram](docs/sup-db-schema-diagram.png)
-
-### dev notes:
-
-##Installing Postgres
-[THIS](https://www.codefellows.org/blog/three-battle-tested-ways-to-install-postgresql) Is a good installation tutorial
-
-!! Skip the step that creates the Launch Agent, and instead use these commands:
-
-**Start:** `postgres -D /usr/local/var/postgres`
-
-**Stop:** `Ctrl + C`
-
-##Running the server:
-
-* Start postgres: `postgres -D /usr/local/var/postgres` and leave running in one terminal window
-* Make the database if it doesn't exist (in a separate terminal window): `createdb SUP`
-* Set up data tables in db: `node setTables.js` (only needs to be run once when you create new database)
-* Run the node server: <!-- `node app.js` --> 
-	* `USER='yourusername' PW='yourpw' node app.js` (make sure you're inside the `server` subdirectory)
-
-##Working with postgres:
-
-
-To check if database is running : `ps aux | grep postgres`
-
-To make and delete database (also works to clear database and start new)
-
-* `dropdb SUP`
-* `createdb SUP`
-
 
 
