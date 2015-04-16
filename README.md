@@ -14,10 +14,10 @@ Initialize the database:
 ```
 $ postgres -D /usr/local/var/postgres
 $ createdb SUP
+
 ```
 
-In a separate terminal window...
-
+Start the app:
 
 ```
 $ cd path/to/sup
@@ -37,11 +37,11 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 ##Routes
 
 *	[`/users`](#users)
-	*	[GET]('#users-get'), [POST](#users-post)
+	*	[GET](#users-get), [POST](#users-post)
 *	[`/users/:id`](#usersid)
 	*	[GET]('#usersid-get')	
 *	[`/users/:id/friends`](#usersidfriend)
-	*	[GET]('#usersidfriend-get), [POST](#usersidfriend-get), [DELETE](#usersidfriend-del)
+	*	[GET](#usersidfriend-get), [POST](#usersidfriend-get), [DELETE](#usersidfriend-del)
 *	[`/users/:id/status`](#useridstatus)
 	*	[GET](#useridstatus-get)
 *	[`/users/:id/status/last`](#useridstatuslast)
@@ -49,8 +49,8 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 *	[`/users/:id/visible`](#useridvisible)
 	*	[GET](#useridvisible-get)
 *	[`/status`](#status)
-	*	[GET](#status-get), [POST]('#status-post)
-*	[`/status:id`]('#statusid)
+	*	[GET](#status-get), [POST](#status-post)
+*	[`/status:id`](#statusid)
 	*	[GET](#statusid-get)
 *	[`/status:id/viewers`](#statusidviewers)
 	*	[GET](#statusidviewers-get), [POST](#statusidviewers-post)
