@@ -77,12 +77,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
     
  
 - <a name="usersid-get">**`/users/:id`**</a>
-  - **Method**: GET
-  - **Description:** gets a single user object
-  - **Request Params:** `id`: integer, a user's ID
-  - **Request body**: *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** gets a single user object
+    - **Request Params:** `id`: integer, a user's ID
+    - **Request body**: *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -99,12 +99,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 
 		
 - <a name="usersidfriends-get">**`/users/:id/friends`**</a>
-  - **Method**: GET
-  - **Description:** gets a user's friends
-  - **Request Params:** `id`: integer, a user's ID
-  - **Request body:** *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** gets a user's friends
+    - **Request Params:** `id`: integer, a user's ID
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -118,12 +118,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**message**: user doesn't exist
 		
 - <a name="usersidfriends-post">**`/users/:id/friends`**</a>
-  - **Method**: POST
-  - **Description:** add a new friend
-  - **Params:** `id`: integer, a user's ID
-  - **Request body:** `friend_id`: integer, a user's ID number
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: POST
+    - **Description:** add a new friend
+    - **Params:** `id`: integer, a user's ID
+    - **Request body:** `friend_id`: integer, a user's ID number
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -137,12 +137,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**message**: user doesn't exist
 		
 - <a name="usersidfriends-del">**`/users/:id/friends`**</a>
-  - **Method**: DELETE
-  - **Description:** delete a friend
-  - **Params:** `id`: integer, a user's ID
-  - **Request body:** `friend_id`: *integer*, a user's ID number
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: DELETE
+    - **Description:** delete a friend
+    - **Params:** `id`: integer, a user's ID
+    - **Request body:** `friend_id`: *integer*, a user's ID number
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -154,12 +154,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**message**: user doesn't exist
 
 - <a name="useridstatus-get">**`/users/:id/status`**</a>
-  - **Method**: GET
-  - **Description:** Get a list of all statuses posted by the user
-  - **Params:** `id`: integer, a user's ID
-  - **Request body:** *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Get a list of all statuses posted by the user
+    - **Params:** `id`: integer, a user's ID
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -181,12 +181,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**message**: user doesn't exist, or they have no statuses
 
 - <a name="useridstatuslast-get">**`/users/:id/status/last`**</a>
-  - **Method**: GET
-  - **Description:** Get the last status posted by a user
-  - **Params:** `id`: integer, a user's ID
-  - **Request body:** *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Get the last status posted by a user
+    - **Params:** `id`: integer, a user's ID
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -204,12 +204,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**message**: user doesn't exist, or they have no statuses
 
 - <a name="useridvisible-get">**`/users/:id/visible`**</a>
-  - **Method**: GET
-  - **Description:** Get an array of statuses visible to the user
-  - **Params:** `id`: integer, a user's ID
-  - **Request body:** *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Get an array of statuses visible to the user
+    - **Params:** `id`: integer, a user's ID
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -225,12 +225,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**message**: user doesn't exist, or they have no visible statuses
 		
 - <a name="status-get">**`/status`**</a>
-  - **Method**: GET
-  - **Description:** Get an array of all statuses in the table
-  - **Params:** *none*
-  - **Request body:** *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Get an array of all statuses in the table
+    - **Params:** *none*
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -247,23 +247,23 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		  ```
 		  
 - <a name="status-post">**`/status`**</a>
-  - **Method**: POST
-  - **Description:** Post a new status to the table
-  - **Params:** *none*
-  - **Request body:** `status: {status_id: int, owner_id: int, longitude: float, latitude: float, time: int}`
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: POST
+    - **Description:** Post a new status to the table
+    - **Params:** *none*
+    - **Request body:** `status: {status_id: int, owner_id: int, longitude: float, latitude: float, time: int}`
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `201`
   		-	**data sample:** 	`{"message":"added 1 new status"}`
   		
 - <a name="statusid-get">**`/status/:id`**</a>
-  - **Method**: GET
-  - **Description:** Get one status from the table
-  - **Params:** `id`: *integer*, a status ID number
-  - **Request body:** *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Get one status from the table
+    - **Params:** `id`: *integer*, a status ID number
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -282,12 +282,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**message**: status doesn't exist
 		
 - <a name="statusidviewers-get">**`/status/:id/viewers`**</a>
-  - **Method**: GET
-  - **Description:** Get an array of users who have permission to view a status
-  - **Params:** `id`: *integer*, a status ID number
-  - **Request body:** *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Get an array of users who have permission to view a status
+    - **Params:** `id`: *integer*, a status ID number
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -299,12 +299,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**message**: status doesn't exist, or it has no viewers
 		
 - <a name="statusidviewers-post">**`/status/:id/viewers`**</a>
-  - **Method**: POST
-  - **Description:** Add permission for a user to view a given status
-  - **Params:** `id`: *integer*, a status ID number
-  - **Request body:** `user_id`: *integer*, ID number of the user to be granted permission
-  - **Content-Type**: application/json
-  - **Response:**
+    - **Method**: POST
+    - **Description:** Add permission for a user to view a given status
+    - **Params:** `id`: *integer*, a status ID number
+    - **Request body:** `user_id`: *integer*, ID number of the user to be granted permission
+    - **Content-Type**: application/json
+    - **Response:**
   	-	Success:
   		-	**status code**: `201`
   		-	**data sample:** 	
@@ -317,12 +317,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		
 		
 - <a name="friends-get">**`/friends`**</a>
-  - **Method**: GET
-  - **Description:** Get an array of all friend relationships in the table
-  - **Params:** `id`: *none*
-  - **Request body:** *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Get an array of all friend relationships in the table
+    - **Params:** `id`: *none*
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -335,12 +335,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		]
 		  ```
 - <a name="friendsid-get">**`/friends/:id`**</a>
-  - **Method**: GET
-  - **Description:** Get one friend relationship from the table
-  - **Params:** `id`: *integer*, a user ID number
-  - **Request body:** `friend_id`: *integer*, a friends ID number
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Get one friend relationship from the table
+    - **Params:** `id`: *integer*, a user ID number
+    - **Request body:** `friend_id`: *integer*, a friends ID number
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -356,12 +356,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		-	**message**: users aren't friends
 
 - <a name="sv-get">**`/sv`**</a>
-  - **Method**: GET
-  - **Description:** Get an array of all status permissions in the table
-  - **Params:** *none*
-  - **Request body:** *none*
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Get an array of all status permissions in the table
+    - **Params:** *none*
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
@@ -375,12 +375,12 @@ Full API Docs and sandbox: [apiary](http://docs.macsup.apiary.io/#)
 		  ```
 
 - <a name="svid-get">**`/sv/:id`**</a>
-  - **Method**: GET
-  - **Description:** Check to see if a user can view a status
-  - **Params:** `id`: *integer*, a status's ID
-  - **Request body:** `user_id`: *integer*, a user's ID number
-  - **Content-Type**: application/json
-  - **Response:** 
+    - **Method**: GET
+    - **Description:** Check to see if a user can view a status
+    - **Params:** `id`: *integer*, a status's ID
+    - **Request body:** `user_id`: *integer*, a user's ID number
+    - **Content-Type**: application/json
+    - **Response:** 
   	-	Success:
   		-	**status code**: `200`
   		-	**data sample:** 	
