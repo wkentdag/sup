@@ -91,7 +91,7 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 	- **Description:** adds new user to database
 	- **Content-Type**: application/json
 	- **Request params:** *none*
-	- **Request body:**: 
+	- **Request body:**: **NOTE**: see [issue #6](https://github.com/wkentdag/sup/issues/6) - during development, the request takes no data and generates the user randomly
 	```
         user: {
           user_id: int
@@ -212,6 +212,7 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 - <a name="useridstatuslast-get">**`/users/:id/status/last`**</a>
     - **Method**: GET
     - **Description:** Get the last status posted by a user
+    	- **NOTE**: see [issue #8](https://github.com/wkentdag/sup/issues/8): during development, this returns the most recent status; in production, it should only return a status if it is currently active
     - **Params:** `id`: integer, a user's ID
     - **Request body:** *none*
     - **Content-Type**: application/json
@@ -235,6 +236,7 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 - <a name="useridvisible-get">**`/users/:id/visible`**</a>
     - **Method**: GET
     - **Description:** Get an array of statuses visible to the user
+    	- **NOTE**: see [issue #8](https://github.com/wkentdag/sup/issues/8): during development, this returns ALL statuses that have ever been visible to the user, not just currently active statuses 
     - **Params:** `id`: integer, a user's ID
     - **Request body:** *none*
     - **Content-Type**: application/json
@@ -283,6 +285,7 @@ To make and delete database (also works to clear the db and start fresh): `dropd
     - **Description:** Post a new status to the table
     - **Params:** *none*
     - **Request body:** `status: {status_id: int, owner_id: int, longitude: float, latitude: float, time: int}`
+    	- **NOTE**: see [issue #6](https://github.com/wkentdag/sup/issues/6) - during development, most of the status fields are generated randomly, and the req.body is actually just a valid user ID called `owner_id`
     - **Content-Type**: application/json
     - **Response:** 
   	-	Success:
@@ -371,6 +374,7 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 - <a name="friendsid-get">**`/friends/:id`**</a>
     - **Method**: GET
     - **Description:** Get one friend relationship from the table
+    	- **NOTE**: see [issue #9](https://github.com/wkentdag/sup/issues/9): this route doesn't exist yet
     - **Params:** `id`: *integer*, a user ID number
     - **Request body:** `friend_id`: *integer*, a friends ID number
     - **Content-Type**: application/json
