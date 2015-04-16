@@ -166,8 +166,6 @@ status.post('/:id/viewers', function(req, res) {
       return res.json(500, {error: err});
     }
 
-    //  FIX ME: this route msut be private to the user_id,
-    //          but the user_id param is mostly for other users
     var status_id = req.params.id;
     var user_id = req.body.user_id;
 
@@ -183,15 +181,6 @@ status.post('/:id/viewers', function(req, res) {
             return res.json(500, {error: err});
           } else if (!err && result && statusCode === 200) {
 
-            //  if the user exists AND the status exists, 
-            //  verify that the user is the status's owner
-            if ( !(user_id == result.status.owner_id) ) {
-              
-              //  if the user id != status.owner_id, the request is forbidden
-              //  because only the owner can set view permissions
-              res.json(403, {error: "user " +user_id + " does not have permission to share status " + status_id});
-            } else {
-
               //  process the request
               Status.addStatusView(client, user_id, status_id, function(err, result) {
                 done();
@@ -204,8 +193,6 @@ status.post('/:id/viewers', function(req, res) {
 
                 client.end();
               }); //  end Status.add
-
-            }
           } else {
             return res.json(statusCode, result);
           }
