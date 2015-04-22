@@ -46,9 +46,8 @@ users.post('/', function(req, res) {
       return res.json(500, {error: err});
     }
 
-    // TODO: when POSTing is set up on the client, uncomment the line below instead of makeRandomUser()
-    // var usrObj = req.body.user;
-    var usrObj = makeRandomUser();
+    var usrObj = req.body.user;
+    // var usrObj = makeRandomUser();
 
     Users.addUser(client, usrObj, function(err, result) {
       done();
