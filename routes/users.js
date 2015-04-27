@@ -55,7 +55,10 @@ users.post('/', function(req, res) {
       if (err) {
         res.json(500, {error: err});
       } else {
-        res.json(201, {message: "added " + result.rowCount + " new user"});      
+        res.json(201, {
+          message: "added new user with id: " + JSON.stringify(result.rows[0].user_id),
+          new_id: JSON.stringify(result.rows[0].user_id)
+        });      
       }
 
       client.end();

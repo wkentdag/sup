@@ -104,7 +104,7 @@ To make and delete database (also works to clear the db and start fresh): `dropd
     - **Response**: 
     	-	Success:
 	    	-	**status code**: `201`
-	    	-	**data sample**: `{"message":"added 1 new user"}`
+	    	-	**data sample**: `{"message":"added new user with id: <id>", "new_id": <id>}`
     
  
 - <a name="usersid-get">**`/users/:id`**</a>
