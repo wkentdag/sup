@@ -6,7 +6,8 @@ var Status = require('../models/Status');
 var api = require('../models/api');
 
 //  for development/testing only:
-var makeRandomStatus = require('../test/utils').makeRandomStatus;
+var makeRandomStatus = require('../test/fake').makeRandomStatus;
+var utils = require('../test/utils');
 
 
 /**
@@ -41,7 +42,6 @@ status.get('/', function(req, res) {
 //          the details of the status besides the owner_id are not fake
 
 //  POST a new status to the table
-//    @param owner_id: ID number of the user who is posting the status
 status.post('/', function(req, res) {
   pg.connect(db, function(err, client, done) {
     if (err) {
@@ -49,15 +49,15 @@ status.post('/', function(req, res) {
       return res.json(500, {error: err});
     }
 
-    var owner_id = req.body.owner_id;
-
-    // TODO: when POSTing is set up on the client, use the line below instead of makeRandomStatus()
-    // var statusObj = req.body.status;
-    var statusObj = makeRandomStatus();
-    statusObj.owner = owner_id;
-
+    var statusObj;
+    if (process.env.NODE_ENV === 'production') {
+      statusObj = req.body.status;
+    } else {
+      statusObj = makeRandomStatus();
+      statusObj.owner_id = req.body.fake_owner_id;
+    }
     //  verify that user exists
-    api.get('/users/' + owner_id, function(err, result, statusCode) {
+    api.get('/users/' + statusObj.owner_id, function(err, result, statusCode) {
       if (err) {
         return res.json(500, {error: err});
 
@@ -79,7 +79,8 @@ status.post('/', function(req, res) {
       } else {
         res.json(statusCode, result);
       }
-    }); //  end api.get owner id
+        }); //  end api.get owner id
+
   }); //  end pg.connect
 });
 

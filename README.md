@@ -79,9 +79,11 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 	    ```
 		   	users: [
 		    	{
-		          user_id: int
-		          name: string
-		          email: string
+		          user_id: int,
+		          first_name: string,
+		          last_name: string,
+              phone: string,
+              created: timestamp
 		        }, 
 		        ...
 		   	]   
@@ -94,9 +96,9 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 	- **Request body:**: **NOTE**: see [issue #6](https://github.com/wkentdag/sup/issues/6) - during development, the request takes no data and generates the user randomly
 	```
         user: {
-          user_id: int
-          name: string
-          email: string
+          first_name: string,
+          last_name: string,
+          phone: string,
         }
     ```  
     - **Response**: 
@@ -116,11 +118,13 @@ To make and delete database (also works to clear the db and start fresh): `dropd
   		-	**status code**: `200`
   		-	**data sample:** 	
 		  ```
-		      {
-		        user_id: int
-		        name: string
-		        email: string
-		      }
+		      user: {
+            user_id: int,
+            first_name: string,
+            last_name: string,
+            phone: string,
+            created: timestamp
+          }
 		  ```
 	-	Error:
 		-	**status code**: `404`
@@ -197,10 +201,11 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 			statuses: [
 				{
 					status_id: int,
-					owner_id: int,
-					longitude: float,
-					latitude: float,
-					time: int
+          owner_id: int,
+          longitude: float,
+          latitude: float,
+          created: timestamp,
+          expires: timestamp
 				}, ...
 			]
 		  }
@@ -226,7 +231,8 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 			owner_id: int,
 			longitude: float,
 			latitude: float,
-			time: int
+			created: timestamp,
+      expires: timestamp
 		}
 		  ```
 	-	Error:
@@ -272,10 +278,11 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 		statuses: [
 			{
 				status_id: int,
-				owner_id: int,
-				longitude: float,
-				latitude: float,
-				time: int
+        owner_id: int,
+        longitude: float,
+        latitude: float,
+        created: timestamp,
+        expires: timestamp
 			}, ...
 		]
 		  ```
@@ -284,8 +291,8 @@ To make and delete database (also works to clear the db and start fresh): `dropd
     - **Method**: POST
     - **Description:** Post a new status to the table
     - **Params:** *none*
-    - **Request body:** `status: {status_id: int, owner_id: int, longitude: float, latitude: float, time: int}`
-    	- **NOTE**: see [issue #6](https://github.com/wkentdag/sup/issues/6) - during development, most of the status fields are generated randomly, and the req.body is actually just a valid user ID called `owner_id`
+    - **Request body:** `status: {owner_id: int, longitude: float, latitude: float}`
+    	- **NOTE**: see [issue #6](https://github.com/wkentdag/sup/issues/6) - during development, most of the status fields are generated randomly, and the req.body field needs to only containg `fake_owner_id`, a valid `user_id` from the fake users table
     - **Content-Type**: application/json
     - **Response:** 
   	-	Success:
@@ -306,10 +313,11 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 		status: 
 			{
 				status_id: int,
-				owner_id: int,
-				longitude: float,
-				latitude: float,
-				time: int
+        owner_id: int,
+        longitude: float,
+        latitude: float,
+        created: timestamp,
+        expires: timestamp
 			}
 		  ```
 	-	Error:

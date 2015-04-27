@@ -7,8 +7,8 @@ var Users = {};
 **/
 
 Users.addUser = function(client, usrObj, cb) {
-	var usrArr = [ usrObj.id, usrObj.name, usrObj.email ]
-	var qStr = "INSERT INTO users(user_id, name, email) VALUES($1, $2, $3)"
+	var usrArr = [ usrObj.first_name, usrObj.last_name, usrObj.phone];
+	var qStr = "INSERT INTO users(first_name, last_name, phone) VALUES($1, $2, $3)"
 	client.query(qStr, usrArr, function(err, result){
 		if (err) return cb(err)
 		cb(null, result);
@@ -16,7 +16,7 @@ Users.addUser = function(client, usrObj, cb) {
 }
 
 Users.getUserById = function(client, user_id, cb) {
-	var qStr = "SELECT user_id, name, email FROM users WHERE user_id = $1";
+	var qStr = "SELECT * FROM users WHERE user_id = $1";
 	client.query(qStr, [user_id], function(err, result){
 		if (err) {
 			return cb(err);

@@ -3,46 +3,39 @@
 var pg = require('pg')
 var User = require("./models/User.js");
 var Status = require("./models/Status.js");
-var user = process.env.USER
-var pw = process.env.PW
-var conString = "postgres://" + user + ":" + pw + "@localhost/SUP";
+var user = process.env.USER;
+var pw = process.env.PW;
+var conString = require('./db');
+
+//  for testing/development only:
+var utils = require('./test/utils');
 
 
 var TableStrings = [ 
   
   "CREATE TABLE IF NOT EXISTS users ( \
-    user_id int PRIMARY KEY,\
-    name varchar(80),\
-    email varchar(30))",
+    user_id serial PRIMARY KEY NOT NULL,\
+    first_name varchar(80) NOT NULL,\
+    last_name varchar(80) NOT NULL, \
+    phone varchar(15) NOT NULL UNIQUE, \
+    created timestamp DEFAULT current_timestamp)",
 
   "CREATE TABLE IF NOT EXISTS status ( \
-    status_id int, \
-    owner_id int,\
-    longitude float,\
-    latitude float,\
-    time int)",
+    status_id serial NOT NULL UNIQUE, \
+    owner_id int NOT NULL REFERENCES users (user_id),\
+    longitude float NOT NULL,\
+    latitude float NOT NULL,\
+    expires timestamp DEFAULT current_timestamp + interval '30 minutes', \
+    created timestamp DEFAULT current_timestamp)",
 
   "CREATE TABLE IF NOT EXISTS statusView(\
-    user_id int,\
-    status_id int)",
+    user_id int NOT NULL,\
+    status_id int NOT NULL)",
   
   "CREATE TABLE IF NOT EXISTS friends(\
-    user_id int,\
-    friend_id int)"
+    user_id int NOT NULL,\
+    friend_id int NOT NULL)"
 ]
-
-var fakeUsers = [
-  { "name": "Mike", "id": 1111, "email": "m@ike.com" },
-  { "name": "erin", "id": 2222, "email": "e@rin.com" },
-  { "name": "kate", "id": 3333, "email": "k@ate.com" }
-]
-
-var fakeStatuses = [
-  { "id": 1234, "owner": 1111, "longitude": 41.11, "latitude": 34.50, "time":30 },
-  { "id": 4321, "owner": 2222, "longitude": 33.33, "latitude": 20.18, "time":15 },
-]
-
-//TODO: Add friends and status view
 
 pg.connect(conString, function(err, client, done){
   if (err) throw err;
@@ -53,21 +46,6 @@ pg.connect(conString, function(err, client, done){
     client.query(string, function(err) {
       if (err) throw err
       done();
-    });
-  })
-
-  //Populate tables in db
-  console.log("Populating database...");
-
-  fakeUsers.map(function(obj){
-    User.addUser(client, obj, function(err){
-      if (err) throw err
-    });
-  })
-
-  fakeStatuses.map(function(obj){
-    Status.addStatus(client, obj, function(err){
-      if (err) throw err
     });
   })
 
