@@ -7,7 +7,7 @@ var Status = require('../models/Status');
 var api = require('../models/api');
 
 //  for testing/development only:
-var makeRandomUser = require('../test/utils').makeRandomUser;
+var makeRandomUser = require('../test/fake').makeRandomUser;
 
 
 /**
@@ -46,8 +46,8 @@ users.post('/', function(req, res) {
       return res.json(500, {error: err});
     }
 
-    var usrObj = req.body.user;
-    // var usrObj = makeRandomUser();
+    // var usrObj = req.body.user;
+    var usrObj = makeRandomUser();
 
     Users.addUser(client, usrObj, function(err, result) {
       done();

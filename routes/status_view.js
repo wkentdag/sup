@@ -7,7 +7,7 @@ var Status = require('../models/Status');
 var api = require('../models/api');
 
 //  for testing/development only:
-var makeRandomStatusView = require('../test/utils').makeRandomStatusView;
+var makeRandomStatusView = require('../test/fake').makeRandomStatusView;
 
 
 //	GET all rows in the table

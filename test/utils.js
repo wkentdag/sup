@@ -1,31 +1,29 @@
-var faker = require('faker');
+var api = require('../models/api');
+var config = require('../config/config');
 
-var makeRandomStatus = function makeRandomStatus() {
-  var fakeStatus = {};
-  fakeStatus.id = faker.finance.mask();
-  // fakeStatus.owner = faker.finance.mask();
-  fakeStatus.latitude = faker.address.latitude();
-  fakeStatus.longitude = faker.address.longitude();
-  fakeStatus.time = faker.random.number(60);
-  return fakeStatus;
+var root_url = 'http://' + config.root_url;
+
+var utils = {};
+
+utils.getValid = function(table, cb) {
+  var path = '/' + table + '/';
+
+  console.log('api.get path:\t', path);
+  api.get(path, function(err, result, statusCode) {
+    if (!err && result && statusCode == 200) {
+      var ids = [];
+      var resObj = result[table];
+      for(var i in resObj) {
+        ids.push(resObj[i].id);
+      }
+      var random_id = ids[Math.floor(Math.random()*ids.length)];
+      cb(null, random_id);
+    } else {
+      cb(err);
+    }
+  });
 }
 
-var makeRandomUser = function makeRandomUser() {
-  var fakeUser = {};
-  fakeUser.id = faker.finance.mask();
-  fakeUser.name = faker.name.firstName();
-  fakeUser.email = faker.internet.email();
-  return fakeUser;
-}
 
-var makeRandomStatusView = function makeRandomStatusView() {
-  var sv = {};
-  sv.user = faker.random.number(1000);
-  sv.status = faker.random.number(1000);
 
-  return sv;
-}
-
-module.exports.makeRandomUser = makeRandomUser;
-module.exports.makeRandomStatus = makeRandomStatus;
-module.exports.makeRandomStatusView = makeRandomStatusView;
+module.exports = utils;
