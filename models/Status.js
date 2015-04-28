@@ -114,7 +114,7 @@ Status.getOneView = function(client, user_id, status_id, cb) {
     if (err) {
       cb(err);
     } else {
-      cb(null, result.rows[0]);
+      cb(null, result.rows);
     }
   });
 }

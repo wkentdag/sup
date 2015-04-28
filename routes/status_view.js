@@ -58,9 +58,9 @@ sv.get('/:status_id', function(req, res) {
 						Status.getOneView(client, user_id, status_id, function(err, result) {
 							done();
 
-							if (!err && result) {
+							if (!err && result.length > 0) {
 								res.json(200, {rel: result});
-							} else if (result) {
+							} else if (result.length === 0) {
 								res.json(404, {message: "user " + user_id + " cannot view status " + status_id});
 							} else {
 								res.json(500, {error: err});

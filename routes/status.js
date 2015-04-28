@@ -201,18 +201,30 @@ status.post('/:id/viewers', function(req, res) {
             return res.json(500, {error: err});
           } else if (!err && result && statusCode === 200) {
 
-              //  process the request
-              Status.addStatusView(client, user_id, status_id, function(err, result) {
-                done();
+              // verify that the relationship doesn't already exist
+              api.getWithParams('/sv/' + status_id, {user_id: user_id}, function(err, result, statusCode) {
+                if (!err && result && statusCode === 404) {
 
-                if (err) {
-                  return res.json(500, err);
+                  //  process the request
+                  Status.addStatusView(client, user_id, status_id, function(err, result) {
+                    done();
+
+                    if (err) {
+                      return res.json(500, {error: err});
+                    } else {
+                      res.json(201, {result: "Added " + result.rowCount + " user to status " + status_id + "'s visibility permissions"});     
+                    }
+
+                    client.end();
+                  }); //  end Status.add
+                  console.log(err);
+                } else if (result) {
+                  res.json(403, {error: "relationship already exists"});
                 } else {
-                  res.json(201, {result: "Added " + result.rowCount + " user to status " + status_id + "'s visibility permissions"});     
+                  res.json(statusCode, {error: err});
                 }
+              });
 
-                client.end();
-              }); //  end Status.add
           } else {
             return res.json(statusCode, result);
           }
