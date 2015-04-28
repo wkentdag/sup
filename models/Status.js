@@ -9,16 +9,15 @@ var Status = {};
 
 Status.addStatus = function(client, statusObj, cb) {
   var statusArr = [ statusObj.owner_id, statusObj.latitude, statusObj.longitude];
-  console.log('statusArr', statusArr);
   var qStr = "INSERT INTO status(owner_id, latitude, longitude) VALUES($1, $2, $3)";
   client.query(qStr, statusArr, function(err, result){
     if (err) return cb(err)
     cb(null, result)
-  })
+  });
 }
 
 Status.getAllStatus = function(client, cb) {
-  var query = client.query("SELECT * FROM status")
+  var query = client.query("SELECT * FROM status ORDER BY created DESC")
   
   query.on('error', function(err) {
     cb(err)
@@ -47,7 +46,7 @@ Status.getStatusById = function(client, status_id, cb) {
 Status.getStatusesByOwner = function(client, owner_id, cb){
   var qStr = "SELECT * \
               FROM status \
-              WHERE owner_id = $1"
+              WHERE owner_id = $1 ORDER BY created DESC"
   
   client.query(qStr, [owner_id],function(err, result){
     if (err) return cb(err)

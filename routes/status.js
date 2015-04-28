@@ -1,6 +1,7 @@
 var express = require('express');
 var status = express.Router();
 var pg = require('pg');
+var forEachAsync = require('forEachAsync').forEachAsync;
 var db = require('../db');
 var Status = require('../models/Status');
 var api = require('../models/api');
@@ -56,6 +57,7 @@ status.post('/', function(req, res) {
       statusObj = makeRandomStatus();
       statusObj.owner_id = req.body.fake_owner_id;
     }
+
     //  verify that user exists
     api.get('/users/' + statusObj.owner_id, function(err, result, statusCode) {
       if (err) {
@@ -135,11 +137,28 @@ status.get('/:id/viewers', function(req, res) {
           done();
 
           if (!err && result.length > 0) {
-            var viewers = [];
+            var viewer_ids = [];
             for (var rel in result) {
-              viewers.push(result[rel].user_id);
+              viewer_ids.push(result[rel].user_id);
             }
-            res.json(200, viewers);
+
+            var viewers = [];
+            forEachAsync(viewer_ids, function(next, id, i, array) {
+              console.log(i, 'id', id);
+              api.get('/users/' + id, function(err, user, statusCode) {
+                if (!err && user && statusCode === 200) {
+                  console.log(user.user);
+                  viewers.push(user.user);
+                } else {
+                  console.log('error in api.get/', id, err);
+                }
+                next();
+              })
+              // api.get('/users/' + id)
+            }).then( function() {
+              res.json(200, {viewers: viewers}); 
+            });
+
           } else if (!err) {
             res.json(404, {error: "status " + status_id + " has no viewers"});
           } else {
