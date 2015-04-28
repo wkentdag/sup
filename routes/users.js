@@ -123,10 +123,10 @@ users.get('/:id/friends', function(req, res) {
         Users.getFriends(client, user_id, function(err, result) {
           done();
 
-          if (!err && result.rowCount > 0) {
+          if (!err && result.length > 0) {
             var friends = [];
-            for (var rel in result.rows) {
-              friends.push(result.rows[rel].friend_id);
+            for (var rel in result) {
+              friends.push(result[rel].friend_id);
             }
             res.json(200, {friends: friends});
           } else if (!err) {
@@ -180,18 +180,30 @@ users.post('/:id/friends', function(req, res) {
           //  if the friend exists...
           } else if (!err && result && statusCode === 200) {
 
-            //  ...add the friendship to the table
-            Users.addFriend(client, user_id, friend_id, function(err, result) {
-              done();
+            //  check to see if they aren't already friends
+            api.getWithParams('/friends/' + user_id, {friend_id: friend_id}, function(err, result, statusCode) {
+              console.log('result', result, 'statusCode', statusCode);
+              if (!err && result && statusCode === 404) {
 
-              if (err) {
-                return res.json(500, {error: err});
+                //  ...add the friendship to the table
+                Users.addFriend(client, user_id, friend_id, function(err, result) {
+                  done();
+
+                  if (err) {
+                    return res.json(500, {error: err});
+                  } else {
+                    res.json(201, {message: "added " + result.rowCount + " friend relationship"});
+                  }
+
+                  client.end();
+                }); //  end Users.addFriend
+              } else if (result) {
+                res.json(403, {error: user_id + ' and ' + friend_id + ' are already friends'});
               } else {
-                res.json(201, {message: "added " + result.rowCount + " friend relationship"});
+                res.json(statusCode, {error: err});
               }
+            }); //  ned api.getWithParams
 
-              client.end();
-            }); //  end Users.addFriend
           } else {
             res.json(statusCode, result);
           }

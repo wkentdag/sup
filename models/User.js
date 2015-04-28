@@ -74,7 +74,7 @@ Users.getFriends = function(client, user_id, cb) {
 	
 	client.query(qStr, [user_id],function(err, result){
 		if (err) return cb(err)
-		cb(null, result)
+		cb(null, result.rows);
 	});
 }
 
@@ -85,7 +85,7 @@ Users.getOneFriendship = function(client, user_id, friend_id, cb) {
     if (err) {
       cb(err);
     } else {
-      cb(null, result.rows[0]);
+      cb(null, result.rows);
     }
   });
 }

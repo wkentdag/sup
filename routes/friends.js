@@ -56,9 +56,9 @@ friends.get('/:id', function(req, res) {
             Users.getOneFriendship(client, user_id, friend_id, function(err, result) {
               done();
 
-              if (!err && result) {
+              if (!err && result.length > 0) {
                 res.json(200, {rel: result});
-              } else if (result) {
+              } else if (!err) {
                 res.json(404, {message: friend_id + ' is not in ' + user_id + 's friend list'});
               } else {
                 res.json(500, {error: err});
