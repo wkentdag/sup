@@ -182,7 +182,6 @@ users.post('/:id/friends', function(req, res) {
 
             //  check to see if they aren't already friends
             api.getWithParams('/friends/' + user_id, {friend_id: friend_id}, function(err, result, statusCode) {
-              console.log('result', result, 'statusCode', statusCode);
               if (!err && result && statusCode === 404) {
 
                 //  ...add the friendship to the table

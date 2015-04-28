@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var users = require('./routes/users');
 var status = require('./routes/status');
 var friends = require('./routes/friends');
+var requests = require('./routes/requests');
 var status_view = require('./routes/status_view');
 
 var app = express();
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded());
 app.use('/users', users);
 app.use('/status', status);
 app.use('/friends', friends);
+app.use('/requests', requests);
 app.use('/sv', status_view);
 
 app.get('/', function(req, res){

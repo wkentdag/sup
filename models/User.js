@@ -112,5 +112,22 @@ Users.deleteFriend = function(client, user_id, friend_id, cb) {
 	});
 }
 
+Users.requestFriend = function(client, user_id, friend_id, cb) {
+	var values = [user_id, friend_id];
+	var query = "INSERT INTO requests(user_id, friend_id) VALUES($1, $2)";
+	client.query(query, values, function(err, result) {
+		if (err) return cb(err);
+		cb(null, result);
+	})
+}
+
+Users.getAllFriendRequests = function(client, cb) {
+	var query = "SELECT * FROM requests";
+	client.query(query, function(err, result) {
+		if (err) return cb(err);
+		cb(null, result.rows);
+	});
+}
+
 
 module.exports = Users;

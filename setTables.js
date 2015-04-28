@@ -34,7 +34,12 @@ var TableStrings = [
   
   "CREATE TABLE IF NOT EXISTS friends(\
     user_id int NOT NULL,\
-    friend_id int NOT NULL)"
+    friend_id int NOT NULL)",
+
+  "CREATE TABLE IF NOT EXISTS requests(\
+    user_id int NOT NULL REFERENCES users (user_id),\
+    friend_id int NOT NULL REFERENCES users (user_id),\
+    created timestamp DEFAULT current_timestamp)"
 ]
 
 pg.connect(conString, function(err, client, done){
