@@ -112,9 +112,9 @@ Users.deleteFriend = function(client, user_id, friend_id, cb) {
 	});
 }
 
-Users.requestFriend = function(client, user_id, friend_id, cb) {
-	var values = [user_id, friend_id];
-	var query = "INSERT INTO requests(user_id, friend_id) VALUES($1, $2)";
+Users.requestFriend = function(client, user_id, requested_id, cb) {
+	var values = [user_id, requested_id];
+	var query = "INSERT INTO requests(user_id, requested_id) VALUES($1, $2)";
 	client.query(query, values, function(err, result) {
 		if (err) return cb(err);
 		cb(null, result);
@@ -127,6 +127,35 @@ Users.getAllFriendRequests = function(client, cb) {
 		if (err) return cb(err);
 		cb(null, result.rows);
 	});
+}
+
+Users.getFriendRequest = function(client, user_id, requested_id, cb) {
+	var query = "SELECT * FROM requests WHERE user_id = $1 AND requested_id = $2";
+	var values = [user_id, requested_id];
+	client.query(query, values, function(err, result) {
+		if (err) return cb(err);
+		cb(null, result.rows);
+	});
+}
+
+Users.approveFriendRequest = function(client, user_id, requested_id, cb) {
+	var deleteReq = "DELETE * FROM requests WHERE user_id = $1 AND requested_id = $2";
+	var approveFriends = "INSERT INTO friends(user_id, friend_id) VALUES($1, $2) RETURNING *";
+	var values = [user_id, requested_id];
+
+	client.query(deleteReq, values, function(err, result) {
+		if (err) {
+			return cb(err);
+		} else {
+			client.query(approveFriends, values, function(err, result) {
+				if (err) {
+					return cb(err);
+				} else {
+					cb(null, result.rows);
+				}
+			});	//	end query 2
+		}
+	});	//	end query 1
 }
 
 

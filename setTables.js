@@ -38,7 +38,7 @@ var TableStrings = [
 
   "CREATE TABLE IF NOT EXISTS requests(\
     user_id int NOT NULL REFERENCES users (user_id),\
-    friend_id int NOT NULL REFERENCES users (user_id),\
+    requested_id int NOT NULL REFERENCES users (user_id),\
     created timestamp DEFAULT current_timestamp)"
 ]
 

@@ -46,8 +46,7 @@ requests.route('/')
               //  verify that the users aren't already friends
               api.getWithParams('/friends/' + user_id, {friend_id: requested_id}, function(err, result, statusCode) {
                 if (!err && result && statusCode === 404) {
-
-                  //  send the friend request
+                                  
                   Users.requestFriend(client, user_id, requested_id, function(err, result) {
                     done();
 
@@ -59,6 +58,7 @@ requests.route('/')
 
                     client.end();
                   }); //  end Users.request
+  
 
                 } else if (!err) {
                   return res.json(statusCode, {error: "users are already friends!"});
@@ -85,4 +85,33 @@ requests.route('/')
     }); //  end pg.connect 
   })  //  end .post
 
+requests.route('/:requested_id')
+  .get(function(req, res) {
+    pg.connect(db, function(err, client, done) {
+      if (err) {
+        return res.json(500, {error: err});
+      }
+
+      var user_id = req.body.user_id;
+      var requested_id = req.params.requested_id;
+      Users.getFriendRequest(client, user_id, requested_id, function(err, result) {
+        done();
+
+        if (!err && result.length > 0) {
+          res.json(200, {request: result});
+        } else if (!err) {
+          res.json(404, {error: "user " + user_id + " has not requested " + requested_id});
+        } else {
+          res.json(500, {error: err});
+        }
+
+        client.end();
+      }); //  end .getFriendReq
+    }); //  end pg.connect
+  });
+
 module.exports = requests;
+
+
+
+
