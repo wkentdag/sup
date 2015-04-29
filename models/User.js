@@ -138,8 +138,17 @@ Users.getFriendRequest = function(client, user_id, requested_id, cb) {
 	});
 }
 
+Users.getPendingRequestsForUser = function(client, requested_id, cb) {
+	var query = "SELECT * FROM requests WHERE requested_id = $1";
+	var values = [requested_id];
+	client.query(query, values, function(err, result) {
+		if (err) return cb(err);
+		cb(null, result.rows);
+	});
+}
+
 Users.approveFriendRequest = function(client, user_id, requested_id, cb) {
-	var deleteReq = "DELETE FROM requests WHERE user_id = $2 AND requested_id = $1";
+	var deleteReq = "DELETE FROM requests WHERE user_id = $1 AND requested_id = $2";
 	var approveFriends = "INSERT INTO friends(user_id, friend_id) VALUES($1, $2) RETURNING *";
 	var values = [user_id, requested_id];
 
@@ -151,7 +160,7 @@ Users.approveFriendRequest = function(client, user_id, requested_id, cb) {
 				if (err) {
 					return cb(err);
 				} else {
-					cb(null, result.rows);
+					cb(null, result);
 				}
 			});	//	end query 2
 		}
