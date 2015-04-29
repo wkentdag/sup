@@ -92,21 +92,39 @@ requests.route('/:requested_id')
         return res.json(500, {error: err});
       }
 
-      var user_id = req.body.user_id;
       var requested_id = req.params.requested_id;
-      Users.getFriendRequest(client, user_id, requested_id, function(err, result) {
-        done();
 
-        if (!err && result.length > 0) {
-          res.json(200, {request: result});
-        } else if (!err) {
-          res.json(404, {error: "user " + user_id + " has not requested " + requested_id});
-        } else {
-          res.json(500, {error: err});
-        }
+      if (req.body.user_id) {
+        user_id = req.body.user_id;
+        Users.getFriendRequest(client, user_id, requested_id, function(err, result) {
+          done();
 
-        client.end();
-      }); //  end .getFriendReq
+          if (!err && result.length > 0) {
+            res.json(200, {pending_requests: result});
+          } else if (!err) {
+            res.json(404, {error: "user " + user_id + " has not requested " + requested_id});
+          } else {
+            res.json(500, {error: err});
+          }
+
+          client.end();
+        }); //  end .getFriendReq
+      } else {
+        Users.getPendingRequestsForUser(client, requested_id, function(err, result) {
+          done();
+
+          if (!err && result.length > 0) {
+            res.json(200, {pending_requests: result});
+          } else if (!err) {
+            res.json(404, {error: "user " + requested_id + " has not been requested"});
+          } else {
+            res.json(500, {error: err});
+          }
+
+          client.end();
+        })
+      }
+
     }); //  end pg.connect
   });
 
