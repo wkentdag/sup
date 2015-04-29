@@ -146,8 +146,6 @@ users.get('/:id/friends', function(req, res) {
   }); //  end pg.connect
 });
 
-//  TODO: verify that they aren't already friends & return 403 if they are
-//          also, 403 if the user tries to add themselves
 
 //  POST a new user to a given user's list of friends
 //    @param id: a user's ID number
@@ -163,55 +161,32 @@ users.post('/:id/friends', function(req, res) {
     var user_id = req.params.id;
     var friend_id = req.body.friend_id;
 
-    //  verify that user exists
-    api.get('/users/' + user_id, function(err, result, statusCode) {
-      if (err) {
-        return res.json(500, {error: err});
-      }
+    //  check to verify that a friend request exists
+    api.getWithParams('/requests/' + friend_id, {user_id: user_id}, function(err, result, statusCode) {
+      if (!err && result && statusCode === 200) {
 
-      //  if the users exists...
-      if (result && statusCode === 200) {
+        //  ...add the friendship to the table, and delete the friend request
+        Users.approveFriendRequest(client, user_id, friend_id, function(err, result) {
+          done();
 
-        //  ...verify that the friend exists as well
-        api.get('/users/' + friend_id, function(err, result, statusCode) {
           if (err) {
             return res.json(500, {error: err});
-
-          //  if the friend exists...
-          } else if (!err && result && statusCode === 200) {
-
-            //  check to see if they aren't already friends
-            api.getWithParams('/friends/' + user_id, {friend_id: friend_id}, function(err, result, statusCode) {
-              if (!err && result && statusCode === 404) {
-
-                //  ...add the friendship to the table
-                Users.approveFriendRequest(client, user_id, friend_id, function(err, result) {
-                  done();
-
-                  if (err) {
-                    return res.json(500, {error: err});
-                  } else {
-                    res.json(201, {message: "added " + result.rowCount + " friend relationship"});
-                  }
-
-                  client.end();
-                }); //  end Users.addFriend
-              } else if (result) {
-                res.json(403, {error: user_id + ' and ' + friend_id + ' are already friends'});
-              } else {
-                res.json(statusCode, {error: err});
-              }
-            }); //  ned api.getWithParams
-
           } else {
-            res.json(statusCode, result);
+            var res_uid = JSON.stringify(result.rows[0].user_id);
+            var res_fid = JSON.stringify(result.rows[0].friend_id);
+            res.json(201, {message: "User " + res_uid + " added user " + res_fid + " to their list of friends"});
           }
-        }); //  end api.get friend id
+
+          client.end();
+        }); //  end Users.addFriend
+      } else if (!err) {
+        res.json(403, {error: user_id + ' has not requested ' + friend_id});
       } else {
-        //  if the user doesn't exist or there was a server error, forward it 
-        res.json(statusCode, result);
-      } 
-    }); //  end api.get user id
+        res.json(statusCode, {error: err});
+      }
+    }); //  ned api.getWithParams
+
+
   }); //  end pg.connect
 });
 

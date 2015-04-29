@@ -58,6 +58,10 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 	*	[GET](#friends-get)
 *	[`/friends/:id`](#friendsid)
 	*	[GET](#friendsid-get)
+* `/requests`
+  * [GET](#requests-get), [POST](#requests-post)
+* `/requests/:requested_id`
+  * [GET](#requests-id-get)
 *	[`/sv`](#sv)			
 	*	[GET](#sv-get)
 *	[`/sv/:id`](#svid)
@@ -168,6 +172,8 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 	-	Error:
 		-	**status code**: `404`
 		-	**message**: user doesn't exist
+    - **status code**: `403`
+    - **message**: `{User <id> hasn't requested user <friend_id>}`
 		
 - <a name="usersidfriends-del">**`/users/:id/friends`**</a>
     - **Method**: DELETE
@@ -399,6 +405,65 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 	-	Error:
 		-	**status code**: `404`
 		-	**message**: users aren't friends
+
+### <a name="requests">Friend requests</a>:
+
+- <a name="requests-get">**`/requests`**</a>
+    - **Method**: GET
+    - **Description:** Get an array of all pending friend requests
+    - **Params:** *none*
+    - **Request body:** *none*
+    - **Content-Type**: application/json
+    - **Response:** 
+      - Success:
+        - **status code**: `200`
+        - **data sample:**  
+        ```
+      pending_requests: [
+        {
+          user_id: 3546,
+          friend_id: 1456,
+          created: /timestamp
+        },
+      ]
+        ```
+
+- <a name="requests-post">**`/requests`**</a>
+    - **Method**: POST
+    - **Description:** Post a new friend request
+    - **Params:** *none*
+    - **Request body:** `user_id`: ID number of the user issuing the request [required]; `requested_id`: id number of the user being requested [required]
+    - **Content-Type**: application/json
+    - **Response:** 
+      - Success:
+        - **status code**: `201`
+        - **data sample:**  
+        ```
+        {"result":"User 4 has requested 3"}
+        ```
+      - Error:
+        - **status code**: `404`
+        - **data sample:** `{"error":"user 5 does not exist"}`
+
+
+- <a name="requests-id-get">**`/requests/:requested_id`**</a>
+    - **Method**: GET
+    - **Description:** Get all requests for a given user's friendship, with options to sort by requester
+    - **Params:** `requsted_id`: id number of the requested user
+    - **Request body:** `user_id`: ID number of the user issuing the request [optional];
+    - **Content-Type**: application/json
+    - **Response:** 
+      - Success:
+        - **status code**: `200`
+        - **data sample:**  
+        ```
+        {"pending_requests":"[user_id: 4, requested_id: 3, created: /timestamp]"}
+        ```
+      - Error:
+        - **status code**: `404`
+        - **data sample:** `{"error":"user < id > has not been requested"}`
+
+
 
 ### <a name="sv">Status View (sv)</a>:
 
