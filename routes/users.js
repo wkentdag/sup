@@ -185,7 +185,7 @@ users.post('/:id/friends', function(req, res) {
               if (!err && result && statusCode === 404) {
 
                 //  ...add the friendship to the table
-                Users.addFriend(client, user_id, friend_id, function(err, result) {
+                Users.approveFriendRequest(client, user_id, friend_id, function(err, result) {
                   done();
 
                   if (err) {

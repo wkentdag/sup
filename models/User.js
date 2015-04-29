@@ -139,7 +139,7 @@ Users.getFriendRequest = function(client, user_id, requested_id, cb) {
 }
 
 Users.approveFriendRequest = function(client, user_id, requested_id, cb) {
-	var deleteReq = "DELETE * FROM requests WHERE user_id = $1 AND requested_id = $2";
+	var deleteReq = "DELETE FROM requests WHERE user_id = $2 AND requested_id = $1";
 	var approveFriends = "INSERT INTO friends(user_id, friend_id) VALUES($1, $2) RETURNING *";
 	var values = [user_id, requested_id];
 
