@@ -7,7 +7,7 @@ var makeRandomStatus = function makeRandomStatus() {
   fakeStatus.owner_id = faker.finance.mask();
   fakeStatus.latitude = faker.address.latitude();
   fakeStatus.longitude = faker.address.longitude();
-  // fakeStatus.duration = getRandomInt(5, 1000000);
+  fakeStatus.duration = getRandomInt(5, 1000);
   return fakeStatus;
 }
 

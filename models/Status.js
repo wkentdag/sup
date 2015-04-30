@@ -1,4 +1,3 @@
-
 var Status = {};
 
 /**
@@ -8,8 +7,13 @@ var Status = {};
 **/
 
 Status.addStatus = function(client, statusObj, cb) {
-  var statusArr = [ statusObj.owner_id, statusObj.latitude, statusObj.longitude];
-  var qStr = "INSERT INTO status(owner_id, latitude, longitude) VALUES($1, $2, $3)";
+
+  var date = new Date();
+  date.setMinutes(date.getMinutes() + statusObj.duration);
+  var expires = date.toISOString();
+
+  var statusArr = [ statusObj.owner_id, statusObj.latitude, statusObj.longitude, statusObj.duration, expires];
+  var qStr = "INSERT INTO status(owner_id, latitude, longitude, duration, expires) VALUES($1, $2, $3, $4, $5)";
   client.query(qStr, statusArr, function(err, result){
     if (err) return cb(err)
     cb(null, result)

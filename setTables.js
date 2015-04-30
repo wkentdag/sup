@@ -25,7 +25,8 @@ var TableStrings = [
     owner_id int NOT NULL REFERENCES users (user_id),\
     longitude float NOT NULL,\
     latitude float NOT NULL,\
-    expires timestamp DEFAULT current_timestamp + interval '30 minutes', \
+    duration int NOT NULL, \
+    expires timestamp NOT NULL, \
     created timestamp DEFAULT current_timestamp)",
 
   "CREATE TABLE IF NOT EXISTS statusView(\
