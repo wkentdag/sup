@@ -27,6 +27,15 @@ Users.getUserById = function(client, user_id, cb) {
 	});
 }
 
+Users.getUserByPhone = function(client, phone, cb) {
+	var query = "SELECT * FROM users WHERE phone = $1";
+	var values = [phone];
+	client.query(query, values, function(err, result) {
+		if (err) return cb(err);
+		cb(null, result.rows);
+	});
+}
+
 Users.getAllUsers = function(client, cb) {
 	var query = client.query("SELECT * FROM users")
 	

@@ -23,7 +23,8 @@ users.get('/', function(req, res) {
       return res.json(500, {error: err});
     }
 
-    Users.getAllUsers(client, function(err, result) {
+    if (!req.query.phone) {
+      Users.getAllUsers(client, function(err, result) {
       //call `done()` to release the client back to the pool
       done();
 
@@ -35,6 +36,23 @@ users.get('/', function(req, res) {
 
       client.end();
     }); //  end Users.getAllUsers
+    } else {
+      var phone = req.query.phone;
+      Users.getUserByPhone(client, phone, function(err, result) {
+        done();
+
+        if (!err && result.length > 0) {
+          res.json(200, {user: result});
+        } else if (!err) {
+          res.json(404, {error: "user with phone number " + phone + " doesn't exist."});
+        } else {
+          res.json(500, {error: err});
+        }
+
+        client.end();
+      });
+    }
+    
   }); //  end pg.connect
 });
 

@@ -77,21 +77,26 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 	- **Content-Type**: application/json
 	- **Request params:** *none*
 	- **Request body:** *none*
+  - **Request queries:** `phone`: a user's phone number [optional]
 	- **Response:**
-		-	**status code**: `200`
-		-	**data sample**:
-	    ```
-		   	users: [
-		    	{
-		          user_id: int,
-		          first_name: string,
-		          last_name: string,
-              phone: string,
-              created: timestamp
-		        }, 
-		        ...
-		   	]   
-    ```  
+    - **Success*:
+  		-	**status code**: `200`
+  		-	**data sample**:
+  	    ```
+  		   	users: [
+  		    	{
+  		          user_id: int,
+  		          first_name: string,
+  		          last_name: string,
+                phone: string,
+                created: timestamp
+  		        }, 
+  		        ...
+  		   	]   
+      ```  
+    - **Error**: [if no queries used, only error is 500. These error responses are for phone queries]
+      - **status code**: `404`
+      - **date sample**: `{error: "user with phone number 68691102doesn't exist."}`
 - <a name="users-post">**`/users`**</a>
 	- **Method:** POST
 	- **Description:** adds new user to database
