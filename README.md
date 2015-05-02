@@ -147,7 +147,9 @@ To make and delete database (also works to clear the db and start fresh): `dropd
   		-	**data sample:** 	
 		  ```
 		      friends: [
-		        12345, 678, 910
+		        {id: 123, first_name: 'Will', ...},
+            {...},
+            ...
 		      ]
 		  ```
 	-	Error:
