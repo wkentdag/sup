@@ -1,3 +1,4 @@
+var forEachAsync = require('forEachAsync').forEachAsync;
 var Users = {};
 
 /**
@@ -68,13 +69,28 @@ Users.getAllFriendships = function(client, cb) {
 
 //  SELECT all friend relations for one user
 Users.getFriends = function(client, user_id, cb) {
-	var qStr = "SELECT * \
-							FROM friends \
-							WHERE user_id = $1"
-	
-	client.query(qStr, [user_id],function(err, result){
-		if (err) return cb(err)
-		cb(null, result.rows);
+	var getFriendIdsOfUser = "SELECT * FROM friends WHERE user_id = $1";
+	var getInfoForUser = "SELECT * FROM users WHERE user_id = $1";
+	client.query(getFriendIdsOfUser, [user_id],function(err, result) {
+		if (err) return cb(err);
+
+		var fids = [];
+		for (var rel in result.rows) {
+			fids.push(result.rows[rel].friend_id);
+		}
+
+		var friends = [];
+		forEachAsync(fids, function(next, friend_id, i, array) {
+
+			client.query(getInfoForUser, [friend_id], function(err, result) {
+				if (err) return cb(err);
+				friends.push(result.rows[0]);
+				next();
+			});
+		}).then(function() {
+			cb(null, friends);
+		});
+
 	});
 }
 

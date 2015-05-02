@@ -124,11 +124,7 @@ users.get('/:id/friends', function(req, res) {
           done();
 
           if (!err && result.length > 0) {
-            var friends = [];
-            for (var rel in result) {
-              friends.push(result[rel].friend_id);
-            }
-            res.json(200, {friends: friends});
+            res.json(200, {friends: result});
           } else if (!err) {
             res.json(404, {error: "User " + user_id + " has no friends :/ "});
           } else {
