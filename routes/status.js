@@ -52,7 +52,11 @@ status.post('/', function(req, res) {
 
     var statusObj;
     if (process.env.NODE_ENV === 'production') {
-      statusObj = req.body.status;
+      statusObj = {};
+      statusObj.owner_id = req.body.owner_id;
+      statusObj.latitude = req.body.latitude;
+      statusObj.longitude = req.body.longitude;
+      statusObj.duration = req.body.duration;
     } else {
       statusObj = makeRandomStatus();
       statusObj.owner_id = req.body.fake_owner_id;

@@ -304,7 +304,7 @@ To make and delete database (also works to clear the db and start fresh): `dropd
     - **Method**: POST
     - **Description:** Post a new status to the table
     - **Params:** *none*
-    - **Request body:** `status: {owner_id: int, longitude: float, latitude: float, duration: int}`
+    - **Request body:** `owner_id`: int, `longitude`: float, `latitude`: float, `duration`: int
     	- **NOTE**: see [issue #6](https://github.com/wkentdag/sup/issues/6) - during development, most of the status fields are generated randomly, and the req.body field needs to only containg `fake_owner_id`, a valid `user_id` from the fake users table
     - **Content-Type**: application/json
     - **Response:** 
