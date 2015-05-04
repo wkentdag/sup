@@ -39,10 +39,8 @@ status.get('/', function(req, res) {
   }); //  end pg.connect
 });
 
-//    TODO: in production, change owner_id to status, when
-//          the details of the status besides the owner_id are not fake
 
-//  POST a new status to the table
+//  POST a new status to the table, along with viewers
 status.post('/', function(req, res) {
   pg.connect(db, function(err, client, done) {
     if (err) {
@@ -62,23 +60,54 @@ status.post('/', function(req, res) {
       statusObj.owner_id = req.body.fake_owner_id;
     }
 
+    var viewer_ids = req.body.selectedFriends;
+    viewer_ids.push(statusObj.owner_id);
+
     //  verify that user exists
     api.get('/users/' + statusObj.owner_id, function(err, result, statusCode) {
       if (err) {
+        done();
         return res.json(500, {error: err});
 
       //  if the user exists, add the status...
       } else if (!err && result && statusCode === 200) {
         Status.addStatus(client, statusObj, function(err, result) {
-          done();
 
           if (err) {
-            res.json(500, {error: err});
+            done();
+            return res.json(500, {error: err});
           } else {
-            res.json(201, {message: "added " + result.rowCount + " new status"});
-          }
 
-          client.end();
+            var new_status = result[0];
+            var new_status_id = new_status.status_id;
+            var viewers = [];
+
+            //  if posting is successful, add each viewer to status_view permissions
+            forEachAsync(viewer_ids, function(next, viewer_id, i, array) {
+
+              Status.addStatusView(client, viewer_id, new_status_id, function(err, result) {
+                if (err) {
+                  // console.log('error on iteration ' + i + ':  ' + err);
+                  done();
+                  client.end();
+                  return res.json(500, {error: err.detail});
+                } else {
+                  // console.log(result[0]);
+                  viewers.push(result[0].user_id);
+                  next();
+                }
+
+              }); //  end Status.add
+            }).then( function() {
+              done();
+              client.end();
+              res.json(201, {
+                new_status: new_status,
+                viewers: viewers
+              });
+            });
+
+          }
         });   //  end Status.addStatus
 
       //  ...otherwise forward the 404/500 error

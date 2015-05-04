@@ -302,15 +302,15 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 		  
 - <a name="status-post">**`/status`**</a>
     - **Method**: POST
-    - **Description:** Post a new status to the table
+    - **Description:** Post a new status to the table and add viewers
     - **Params:** *none*
-    - **Request body:** `owner_id`: int, `longitude`: float, `latitude`: float, `duration`: int
-    	- **NOTE**: see [issue #6](https://github.com/wkentdag/sup/issues/6) - during development, most of the status fields are generated randomly, and the req.body field needs to only containg `fake_owner_id`, a valid `user_id` from the fake users table
+    - **Request body:** `owner_id`: int, `longitude`: float, `latitude`: float, `duration`: int, `selectedFriends`: int[] (array of user ids)
+    	- **NOTE**: see [issue #6](https://github.com/wkentdag/sup/issues/6) - during development, most of the status fields are generated randomly, and the req.body field needs to only contain `fake_owner_id`, a valid `user_id` from the fake users table, and 'selectedFriends'
     - **Content-Type**: application/json
     - **Response:** 
   	-	Success:
   		-	**status code**: `201`
-  		-	**data sample:** 	`{"message":"added 1 new status"}`
+  		-	**data sample:** 	`{"new_status":"status_id: 1, latitude: ...", "viewers": [1, 2, 3, ...]}`
   		
 - <a name="statusid-get">**`/status/:id`**</a>
     - **Method**: GET
