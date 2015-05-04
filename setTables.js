@@ -30,12 +30,12 @@ var TableStrings = [
     created timestamp DEFAULT current_timestamp)",
 
   "CREATE TABLE IF NOT EXISTS statusView(\
-    user_id int NOT NULL,\
-    status_id int NOT NULL)",
+    user_id int NOT NULL REFERENCES users (user_id),\
+    status_id int NOT NULL REFERENCES status (status_id))",
   
   "CREATE TABLE IF NOT EXISTS friends(\
-    user_id int NOT NULL,\
-    friend_id int NOT NULL)",
+    user_id int NOT NULL REFERENCES users (user_id),\
+    friend_id int NOT NULL REFERENCES users (user_id))",
 
   "CREATE TABLE IF NOT EXISTS requests(\
     user_id int NOT NULL REFERENCES users (user_id),\
