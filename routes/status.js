@@ -60,7 +60,14 @@ status.post('/', function(req, res) {
       statusObj.owner_id = req.body.fake_owner_id;
     }
 
-    var viewer_ids = req.body.selectedFriends;
+    //  intialize an array of viewer_ids to be granted permission to view the new status
+    //  will contain owner_id at a minimum, and selectedFriends if attached to the request
+    var viewer_ids;
+    if (req.body.selectedFriends) {
+      viewer_ids = req.body.selectedFriends;
+    } else {
+      viewer_ids = [];
+    }
     viewer_ids.push(statusObj.owner_id);
 
     //  verify that user exists
@@ -87,7 +94,6 @@ status.post('/', function(req, res) {
 
               Status.addStatusView(client, viewer_id, new_status_id, function(err, result) {
                 if (err) {
-                  // console.log('error on iteration ' + i + ':  ' + err);
                   done();
                   client.end();
                   return res.json(500, {error: err.detail});
