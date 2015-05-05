@@ -78,6 +78,10 @@ status.post('/', function(req, res) {
 
       //  if the user exists, add the status...
       } else if (!err && result && statusCode === 200) {
+
+        var owner_name = result.user.first_name + " " + result.user.last_name;
+        statusObj.owner_name = owner_name;
+
         Status.addStatus(client, statusObj, function(err, result) {
 
           if (err) {

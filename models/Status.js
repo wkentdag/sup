@@ -12,8 +12,8 @@ Status.addStatus = function(client, statusObj, cb) {
   date.setMinutes(date.getMinutes() + statusObj.duration);
   var expires = date.toISOString();
 
-  var statusArr = [ statusObj.owner_id, statusObj.latitude, statusObj.longitude, statusObj.duration, expires];
-  var qStr = "INSERT INTO status(owner_id, latitude, longitude, duration, expires) VALUES($1, $2, $3, $4, $5)\
+  var statusArr = [ statusObj.owner_id, statusObj.owner_name, statusObj.latitude, statusObj.longitude, statusObj.duration, expires];
+  var qStr = "INSERT INTO status(owner_id, owner_name, latitude, longitude, duration, expires) VALUES($1, $2, $3, $4, $5, $6)\
               RETURNING *";
   client.query(qStr, statusArr, function(err, result){
     if (err) return cb(err)

@@ -23,6 +23,7 @@ var TableStrings = [
   "CREATE TABLE IF NOT EXISTS status ( \
     status_id serial NOT NULL UNIQUE, \
     owner_id int NOT NULL REFERENCES users (user_id),\
+    owner_name varchar NOT NULL,\
     longitude float NOT NULL,\
     latitude float NOT NULL,\
     duration int NOT NULL, \

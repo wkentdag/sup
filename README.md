@@ -215,8 +215,10 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 				{
 					status_id: int,
           owner_id: int,
+          owner_name: string,
           longitude: float,
           latitude: float,
+          duration: int,
           created: timestamp,
           expires: timestamp
 				}, ...
