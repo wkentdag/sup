@@ -137,34 +137,20 @@ users.get('/:id/friends', function(req, res) {
     }
 
     var user_id = req.params.id;
+    Users.getFriends(client, user_id, function(err, result) {
+      done();
 
-    //  verify that the user exists
-    api.get('/users/' + user_id, function(err, result, statusCode) {
-      if (err) {
-        return res.json(500, {error: err});
-      }
-
-      //  if true, query their friends
-      if (result && statusCode === 200) {
-        Users.getFriends(client, user_id, function(err, result) {
-          done();
-
-          if (!err && result.length > 0) {
-            res.json(200, {friends: result});
-          } else if (!err) {
-            res.json(404, {error: "User " + user_id + " has no friends :/ "});
-          } else {
-            res.json(500, {error: err});
-          }
-
-          client.end();
-        }); //  end Users.getFriends
-
-      //  if false, forward the 404/500 error
+      if (!err && result.length > 0) {
+        res.json(200, {friends: result});
+      } else if (!err) {
+        res.json(404, {error: "User " + user_id + " has no friends :/ "});
       } else {
-        return res.json(statusCode, result);
+        console.log('error in getFriends of ' + user_id + ':\n' + err);
+        res.json(500, {error: err});
       }
-    }); //  end api.get user id
+
+      client.end();
+    }); //  end Users.getFriends
   }); //  end pg.connect
 });
 

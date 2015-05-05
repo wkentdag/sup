@@ -156,8 +156,7 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 		      ]
 		  ```
 	-	Error:
-		-	**status code**: `404`
-		-	**message**: user doesn't exist
+		-	**status code**: `500`
 		
 - <a name="usersidfriends-post">**`/users/:id/friends`**</a>
     - **Method**: POST
