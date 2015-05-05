@@ -64,10 +64,17 @@ users.post('/', function(req, res) {
       return res.json(500, {error: err});
     }
 
-    // var usrObj = req.body.user;
-    var usrObj = makeRandomUser();
+    var userObj;
+    if (process.env.NODE_ENV === 'production') {
+      userObj = {};
+      userObj.first_name = req.body.first_name;
+      userObj.last_name = req.body.last_name;
+      userObj.phone = req.body.phone;
+    } else {
+      userObj = makeRandomUser();
+    }
 
-    Users.addUser(client, usrObj, function(err, result) {
+    Users.addUser(client, userObj, function(err, result) {
       done();
 
       if (err) {

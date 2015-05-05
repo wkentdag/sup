@@ -104,11 +104,9 @@ To make and delete database (also works to clear the db and start fresh): `dropd
 	- **Request params:** *none*
 	- **Request body:**: **NOTE**: see [issue #6](https://github.com/wkentdag/sup/issues/6) - during development, the request takes no data and generates the user randomly
 	```
-        user: {
-          first_name: string,
-          last_name: string,
-          phone: string,
-        }
+      first_name: string,
+      last_name: string,
+      phone: string,
     ```  
     - **Response**: 
     	-	Success:
