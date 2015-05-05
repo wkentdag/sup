@@ -137,9 +137,9 @@ Users.deleteFriend = function(client, user_id, friend_id, cb) {
 	});
 }
 
-Users.requestFriend = function(client, user_id, requested_id, cb) {
-	var values = [user_id, requested_id];
-	var query = "INSERT INTO requests(user_id, requested_id) VALUES($1, $2)";
+Users.requestFriend = function(client, user_id, requester_name, requested_id, cb) {
+	var values = [user_id, requester_name, requested_id];
+	var query = "INSERT INTO requests(user_id, user_name, requested_id) VALUES($1, $2, $3)";
 	client.query(query, values, function(err, result) {
 		if (err) return cb(err);
 		cb(null, result);

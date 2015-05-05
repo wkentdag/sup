@@ -39,6 +39,8 @@ requests.route('/')
       api.get('/users/' + user_id, function(err, result, statusCode) {
         if (!err && result && statusCode === 200) {
 
+          var requester_name = result.user.first_name + " " + result.user.last_name;
+
           //  verify that the requested friend exists
           api.get('/users/' + requested_id, function(err, result, statusCode) {
             if (!err && result && statusCode === 200) {
@@ -47,7 +49,7 @@ requests.route('/')
               api.getWithParams('/friends/' + user_id, {friend_id: requested_id}, function(err, result, statusCode) {
                 if (!err && result && statusCode === 404) {
                                   
-                  Users.requestFriend(client, user_id, requested_id, function(err, result) {
+                  Users.requestFriend(client, user_id, requester_name, requested_id, function(err, result) {
                     done();
 
                     if (err) {

@@ -40,6 +40,7 @@ var TableStrings = [
 
   "CREATE TABLE IF NOT EXISTS requests(\
     user_id int NOT NULL REFERENCES users (user_id),\
+    user_name varchar NOT NULL, \
     requested_id int NOT NULL REFERENCES users (user_id),\
     created timestamp DEFAULT current_timestamp)"
 ]
