@@ -73,6 +73,7 @@ users.post('/', function(req, res) {
       if (err) {
         res.json(500, {error: err});
       } else {
+        console.log('new id: ' + JSON.stringify(result.rows[0].user_id) );
         res.json(201, {
           message: "added new user with id: " + JSON.stringify(result.rows[0].user_id),
           new_id: JSON.stringify(result.rows[0].user_id)
@@ -284,11 +285,7 @@ users.get('/:id/visible', function(req, res) {
           done();
 
           if (!err && result.length > 0) {
-            var statuses = [];
-            for (var rel in result) {
-              statuses.push(result[rel].status_id);
-            }
-            res.json(200, {statuses: statuses});
+            res.json(200, {statuses: result});
           } else if (!err) {
             res.json(404, {error: "user " + user_id + " has no visible statuses"});
           } else {

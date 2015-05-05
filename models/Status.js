@@ -1,3 +1,4 @@
+var forEachAsync = require('forEachAsync').forEachAsync;
 var Status = {};
 
 /**
@@ -93,13 +94,27 @@ Status.getViewersByStatus = function(client, status_id, cb) {
 }
 
 Status.getVisibleStatuses = function(client, user_id, cb) {
-  var qStr = "SELECT * FROM statusView WHERE user_id = $1";
-  client.query(qStr, [user_id], function(err, result) {
-    if (err) {
-      return cb(err);
-    } else {
-      cb(null, result.rows);
+  var getViewers = "SELECT * FROM statusView WHERE user_id = $1";
+  var getInfoForStatus = "SELECT * FROM status WHERE status_id = $1";
+  client.query(getViewers, [user_id], function(err, result) {
+    if (err) return cb(err);
+
+    var sids = [];
+    for (var rel in result.rows) {
+      sids.push(result.rows[rel].status_id);
     }
+
+    var statuses = [];
+    forEachAsync(sids, function(next, status_id, i, array) {
+      client.query(getInfoForStatus, [status_id], function(err, result) {
+        if (err) return cb(err);
+        statuses.push(result.rows[0]);
+        next();
+      });
+    }).then( function() {
+      cb(null, statuses);
+    });
+
   });
 }
 
