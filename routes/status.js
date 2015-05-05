@@ -55,6 +55,7 @@ status.post('/', function(req, res) {
       statusObj.latitude = req.body.latitude;
       statusObj.longitude = req.body.longitude;
       statusObj.duration = req.body.duration;
+      statusObj.message = req.body.message;
     } else {
       statusObj = makeRandomStatus();
       statusObj.owner_id = req.body.fake_owner_id;
@@ -111,6 +112,8 @@ status.post('/', function(req, res) {
             }).then( function() {
               done();
               client.end();
+              console.log('new_status: ' + new_status);
+              console.log('viewers: ' + viewers);
               res.json(201, {
                 new_status: new_status,
                 viewers: viewers
