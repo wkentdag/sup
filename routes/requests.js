@@ -116,6 +116,12 @@ requests.route('/:requested_id')
           done();
 
           if (!err && result.length > 0) {
+
+            //  convert ISO8601 to unix for parsing on the client w/YLMoment
+            for (var user in result) {
+              result[user].created = Date.parse(result[user].created) / 1000;
+            }
+
             res.json(200, {pending_requests: result});
           } else if (!err) {
             res.json(404, {error: "user " + requested_id + " has not been requested"});

@@ -42,7 +42,7 @@ users.get('/', function(req, res) {
         done();
 
         if (!err && result.length > 0) {
-          res.json(200, {user: result});
+          res.json(200, {user: result[0]});
         } else if (!err) {
           res.json(404, {error: "user with phone number " + phone + " doesn't exist."});
         } else {
@@ -278,6 +278,12 @@ users.get('/:id/visible', function(req, res) {
           done();
 
           if (!err && result.length > 0) {
+
+            //  convert ISO8601 to unix for parsing on the client w/YLMoment
+            for (var status in result) {
+              result[status].created = Date.parse(result[status].created) / 1000;
+            }
+
             res.json(200, {statuses: result});
           } else if (!err) {
             res.json(404, {error: "user " + user_id + " has no visible statuses"});

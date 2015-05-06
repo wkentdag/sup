@@ -164,7 +164,7 @@ Users.getFriendRequest = function(client, user_id, requested_id, cb) {
 }
 
 Users.getPendingRequestsForUser = function(client, requested_id, cb) {
-	var query = "SELECT * FROM requests WHERE requested_id = $1";
+	var query = "SELECT * FROM requests WHERE requested_id = $1 ORDER BY created DESC";
 	var values = [requested_id];
 	client.query(query, values, function(err, result) {
 		if (err) return cb(err);
