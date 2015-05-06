@@ -9,9 +9,7 @@ var Status = {};
 
 Status.addStatus = function(client, statusObj, cb) {
 
-  var date = new Date();
-  date.setMinutes(date.getMinutes() + statusObj.duration);
-  var expires = date.toISOString();
+  var expires = new Date(new Date().getTime() + (statusObj.duration * 60 * 1000) );
 
   var statusArr = [ statusObj.owner_id, statusObj.owner_name, statusObj.message, statusObj.latitude, statusObj.longitude, statusObj.duration, expires];
   var qStr = "INSERT INTO status(owner_id, owner_name, message, latitude, longitude, duration, expires) VALUES($1, $2, $3, $4, $5, $6, $7)\
