@@ -282,6 +282,7 @@ users.get('/:id/visible', function(req, res) {
             //  convert ISO8601 to unix for parsing on the client w/YLMoment
             for (var status in result) {
               result[status].created = Date.parse(result[status].created) / 1000;
+              result[status].expires = Date.parse(result[status].expires) / 1000;
             }
 
             res.json(200, {statuses: result});
