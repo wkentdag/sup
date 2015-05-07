@@ -93,7 +93,7 @@ Status.getViewersByStatus = function(client, status_id, cb) {
 
 Status.getVisibleStatuses = function(client, user_id, cb) {
   var getViewers = "SELECT * FROM statusView WHERE user_id = $1";
-  var getInfoForStatus = "SELECT * FROM status WHERE status_id = $1";
+  var getInfoForStatus = "SELECT * FROM status WHERE status_id = $1 ORDER BY expires DESC";
   client.query(getViewers, [user_id], function(err, result) {
     if (err) return cb(err);
 
