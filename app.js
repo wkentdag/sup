@@ -3,6 +3,9 @@ var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser'); 
 
+var fs =  require('fs');
+var marked = require('marked');
+
 
 var users = require('./routes/users');
 var status = require('./routes/status');
@@ -25,8 +28,11 @@ app.use('/requests', requests);
 app.use('/sv', status_view);
 
 app.get('/', function(req, res){
-  res.send('Hi from sup')
-})
+
+  var mdPath = './README.md';
+  var mdFile = fs.readFileSync('./README.md', 'utf8');
+  res.send(marked(mdFile));
+});
 
 
 //--------- Error Handling for express ---------
