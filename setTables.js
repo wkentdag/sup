@@ -1,14 +1,9 @@
 #!/bin/node
 
 var pg = require('pg')
-var User = require("./models/User.js");
-var Status = require("./models/Status.js");
 var user = process.env.USER;
 var pw = process.env.PW;
 var conString = require('./db');
-
-//  for testing/development only:
-var utils = require('./test/utils');
 
 
 var TableStrings = [ 
