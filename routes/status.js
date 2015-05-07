@@ -8,7 +8,6 @@ var api = require('../models/api');
 
 //  for development/testing only:
 var makeRandomStatus = require('../test/fake').makeRandomStatus;
-var utils = require('../test/utils');
 
 
 /**

@@ -1,7 +1,5 @@
 var faker = require('faker');
 
-//  
-
 var makeRandomStatus = function makeRandomStatus() {
   var fakeStatus = {};
   fakeStatus.owner_id = faker.finance.mask();
@@ -23,7 +21,6 @@ var makeRandomStatusView = function makeRandomStatusView() {
   var sv = {};
   sv.user = faker.random.number(1000);
   sv.status = faker.random.number(1000);
-
   return sv;
 }
 
