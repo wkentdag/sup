@@ -1,5 +1,7 @@
+var port = process.env.PORT;
+
 var config = {};
-config.root_url = 'localhost:3000';
+config.root_url = 'localhost:' + port;
 
 
 module.exports = config;

@@ -482,9 +482,9 @@ $ cd path/to/sup
 $ npm install
 $ node setTables.js
         # only needs to be run once on setup
-$ USER=usn PW=yourpw NODE_ENV=production npm start
+$ PORT=3000 USER=usn PW=yourpw NODE_ENV=production npm start
         # or ...
-$ USER=usn PW=yourpw DEBUG=sup npm start
+$ PORT=3000 USER=usn PW=yourpw DEBUG=sup npm start
         # defaults to dev mode; POSTing to /users and /status mostly generates fake data
         # see their specific route docs for more info 
 
