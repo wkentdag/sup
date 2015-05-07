@@ -4,7 +4,7 @@ var pg = require('pg');
 
 var user = process.env.USER;
 var pw = process.env.PW;
-var db = 'SUP';
+var db = process.env.DB;
 var conString = "postgres://" + user + ":" + pw + "@localhost/" + db;
 
 module.exports = conString;
