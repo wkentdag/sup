@@ -16,7 +16,6 @@
     "forEachAsync": "^3.0.0",
     "morgan": "^1.5.1",
     "pg": "^4.3.0",
-    "sql": "^0.48.0",
     "superagent": "^0.21.0"
   },
   "devDependencies": {
